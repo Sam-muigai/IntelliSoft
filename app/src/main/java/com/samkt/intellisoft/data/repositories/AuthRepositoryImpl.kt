@@ -6,6 +6,7 @@ import com.samkt.intellisoft.data.mappers.toData
 import com.samkt.intellisoft.domain.model.SignUp
 import com.samkt.intellisoft.domain.repositories.AuthRepository
 import com.samkt.intellisoft.domain.helpers.Result
+import com.samkt.intellisoft.domain.model.Login
 
 class AuthRepositoryImpl(
     private val intellisoftApiService: IntellisoftApiService
@@ -15,6 +16,16 @@ class AuthRepositoryImpl(
         return when (val response = intellisoftApiService.signUp(signUp.toData())) {
             is ApiResponse.Error -> Result.Error(response.errorMessage)
             is ApiResponse.Success -> Result.Success(response.data.signUpData.message)
+        }
+    }
+
+    override suspend fun login(login: Login): Result<String> {
+        return when (val response = intellisoftApiService.login(login.toData())) {
+            is ApiResponse.Error -> Result.Error(response.errorMessage)
+            is ApiResponse.Success -> {
+                // Store access token
+                Result.Success(response.data.message)
+            }
         }
     }
 }

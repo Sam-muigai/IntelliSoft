@@ -1,5 +1,7 @@
 package com.samkt.intellisoft.core.networking
 
+import com.samkt.intellisoft.core.networking.dtos.LoginRequest
+import com.samkt.intellisoft.core.networking.dtos.LoginResponse
 import com.samkt.intellisoft.core.networking.dtos.SignUpRequest
 import com.samkt.intellisoft.core.networking.dtos.SignUpResponse
 import com.samkt.intellisoft.core.networking.helpers.ApiResponse
@@ -15,6 +17,14 @@ class IntellisoftApiServiceImpl(
         return safeApiCall {
             client.post(BASE_URL + "user/signup") {
                 setBody(signUpRequest)
+            }
+        }
+    }
+
+    override suspend fun login(loginRequest: LoginRequest): ApiResponse<LoginResponse> {
+        return safeApiCall {
+            client.post(BASE_URL + "user/signin") {
+                setBody(loginRequest)
             }
         }
     }

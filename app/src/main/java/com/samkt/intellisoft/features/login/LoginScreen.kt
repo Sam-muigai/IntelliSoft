@@ -1,5 +1,6 @@
 package com.samkt.intellisoft.features.login
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,12 +15,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.samkt.intellisoft.core.ui.components.TibaFilledButton
 import com.samkt.intellisoft.core.ui.components.TibaPasswordTextField
 import com.samkt.intellisoft.core.ui.components.TibaTextField
+import com.samkt.intellisoft.utils.OneTimeEvents
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -28,6 +33,19 @@ fun LoginScreen(
     onSignUpClick: () -> Unit
 ) {
     val loginScreenState = loginScreenViewModel.loginScreenState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        loginScreenViewModel.oneTimeEvents.collectLatest { event ->
+            when (event) {
+                is OneTimeEvents.ShowMessage -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+
+                else -> Unit
+            }
+        }
+    }
     LoginScreenContent(
         loginScreenState = loginScreenState,
         onEvent = loginScreenViewModel::onEvent,

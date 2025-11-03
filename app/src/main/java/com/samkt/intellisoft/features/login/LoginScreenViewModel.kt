@@ -1,10 +1,17 @@
 package com.samkt.intellisoft.features.login
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.samkt.intellisoft.domain.helpers.Result
+import com.samkt.intellisoft.domain.model.Login
 import com.samkt.intellisoft.domain.repositories.AuthRepository
+import com.samkt.intellisoft.utils.OneTimeEvents
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class LoginScreenViewModel(
     private val authRepository: AuthRepository
@@ -13,6 +20,8 @@ class LoginScreenViewModel(
     private val _loginScreenState = MutableStateFlow(LoginScreenState())
     val loginScreenState = _loginScreenState.asStateFlow()
 
+    private val _oneTimeEvents = Channel<OneTimeEvents>()
+    val oneTimeEvents = _oneTimeEvents.receiveAsFlow()
 
     fun onEvent(event: LoginScreenEvent) {
         when (event) {
@@ -76,10 +85,41 @@ class LoginScreenViewModel(
                     return@apply
                 }
             }
+            _loginScreenState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
+
+            viewModelScope.launch {
+                val login = Login(
+                    email = email,
+                    password = password
+                )
+                when (val result = authRepository.login(login)) {
+                    is Result.Error -> {
+                        _loginScreenState.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
+                        _oneTimeEvents.send(OneTimeEvents.ShowMessage(result.message))
+                    }
+
+                    is Result.Success -> {
+                        _loginScreenState.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
+                        _oneTimeEvents.send(OneTimeEvents.ShowMessage(result.data))
+                    }
+                }
+            }
         }
     }
 
-    private fun clearErrorState(){
+    private fun clearErrorState() {
         _loginScreenState.update {
             it.copy(
                 emailError = null,
