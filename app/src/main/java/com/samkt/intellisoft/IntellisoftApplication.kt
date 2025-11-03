@@ -4,7 +4,7 @@ import android.app.Application
 import com.samkt.intellisoft.core.networking.di.networkModule
 import com.samkt.intellisoft.core.preferences.di.preferencesModule
 import com.samkt.intellisoft.data.di.dataModule
-import com.samkt.intellisoft.features.addPatient.di.addPatientModule
+import com.samkt.intellisoft.features.patientRegistration.di.patientRegistrationModule
 import com.samkt.intellisoft.features.home.di.homeModule
 import com.samkt.intellisoft.features.login.di.loginModule
 import com.samkt.intellisoft.features.signUp.di.signUpModule
@@ -22,7 +22,7 @@ class IntellisoftApplication : Application() {
             signUpModule,
             loginModule,
             homeModule,
-            addPatientModule,
+            patientRegistrationModule,
             preferencesModule
         )
         startKoin {

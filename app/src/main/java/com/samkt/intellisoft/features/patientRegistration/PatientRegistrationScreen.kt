@@ -1,4 +1,4 @@
-package com.samkt.intellisoft.features.addPatient
+package com.samkt.intellisoft.features.patientRegistration
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -23,20 +22,19 @@ import com.samkt.intellisoft.core.ui.components.TibaDatePicker
 import com.samkt.intellisoft.core.ui.components.TibaDropDown
 import com.samkt.intellisoft.core.ui.components.TibaFilledButton
 import com.samkt.intellisoft.core.ui.components.TibaTextField
-import com.samkt.intellisoft.features.login.LoginScreenEvent
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AddPatientScreen(
-    addPatientScreenViewModel: AddPatientScreenViewModel = koinViewModel(),
+fun PatientRegistrationScreen(
+    patientRegistrationScreenViewModel: PatientRegistrationScreenViewModel = koinViewModel(),
     onBackClick: () -> Unit = {}
 ) {
     val addPatientScreenState =
-        addPatientScreenViewModel.addPatientScreenState.collectAsStateWithLifecycle().value
+        patientRegistrationScreenViewModel.addPatientScreenState.collectAsStateWithLifecycle().value
 
-    AddPatientScreenContent(
+    PatientRegistrationScreenContent(
         addPatientScreenState = addPatientScreenState,
-        onEvent = addPatientScreenViewModel::onEvent,
+        onEvent = patientRegistrationScreenViewModel::onEvent,
         onBackClick = onBackClick
     )
 
@@ -44,7 +42,7 @@ fun AddPatientScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPatientScreenContent(
+fun PatientRegistrationScreenContent(
     modifier: Modifier = Modifier,
     addPatientScreenState: AddPatientScreenState,
     onEvent: (AddPatientScreenEvent) -> Unit,
