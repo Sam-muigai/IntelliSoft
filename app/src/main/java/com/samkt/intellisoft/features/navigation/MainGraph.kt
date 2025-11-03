@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.samkt.intellisoft.features.addPatient.AddPatientScreen
 import com.samkt.intellisoft.features.home.HomeScreen
 import com.samkt.intellisoft.features.login.LoginScreen
 import com.samkt.intellisoft.features.signUp.SignUpScreen
@@ -50,7 +51,21 @@ fun App() {
         composable(
             route = Screens.Home.route
         ) {
-            HomeScreen()
+            HomeScreen(
+                onAddPatientClick = {
+                    navHostController.navigate(Screens.AddNewPatient.route)
+                }
+            )
+        }
+
+        composable(
+            route = Screens.AddNewPatient.route
+        ){
+            AddPatientScreen(
+                onBackClick = {
+                    navHostController.popBackStack()
+                }
+            )
         }
     }
 }

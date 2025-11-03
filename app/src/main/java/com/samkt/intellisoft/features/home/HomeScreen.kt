@@ -29,10 +29,14 @@ import com.samkt.intellisoft.domain.model.User
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreen(homeScreenViewModel: HomeScreenViewModel = koinViewModel()) {
+fun HomeScreen(
+    homeScreenViewModel: HomeScreenViewModel = koinViewModel(),
+    onAddPatientClick: () -> Unit = {}
+) {
     val user = homeScreenViewModel.user.collectAsStateWithLifecycle().value
     HomeScreenContent(
-        user = user
+        user = user,
+        onAddPatientClick = onAddPatientClick
     )
 }
 
@@ -40,7 +44,8 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel = koinViewModel()) {
 @Composable
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
-    user: User
+    user: User,
+    onAddPatientClick: () -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -83,9 +88,7 @@ fun HomeScreenContent(
         },
         floatingActionButton = {
             TibaFilledButton(
-                onClick = {
-
-                },
+                onClick = onAddPatientClick,
                 label = "+ ADD NEW PATIENT"
             )
         }
