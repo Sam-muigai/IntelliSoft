@@ -1,0 +1,163 @@
+package com.samkt.intellisoft.features.signUp
+
+import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.samkt.intellisoft.core.ui.components.TibaPasswordTextField
+import com.samkt.intellisoft.core.ui.components.TibaTextField
+import com.samkt.intellisoft.utils.OneTimeEvents
+import kotlinx.coroutines.flow.collectLatest
+import org.koin.androidx.compose.koinViewModel
+
+@Composable
+fun SignUpScreen(
+    signUpViewModel: SignUpViewModel = koinViewModel()
+) {
+    val signUpScreenState = signUpViewModel.signUpScreenState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        signUpViewModel.oneTimeEvents.collectLatest { event ->
+            when (event) {
+                is OneTimeEvents.ShowMessage -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+
+                else -> Unit
+            }
+        }
+    }
+
+    SignUpScreenContent(
+        signUpScreenState = signUpScreenState,
+        onEvent = signUpViewModel::onEvent
+    )
+}
+
+@Composable
+fun SignUpScreenContent(
+    modifier: Modifier = Modifier,
+    signUpScreenState: SignUpScreenState,
+    onEvent: (SignUpScreenEvent) -> Unit,
+) {
+    Scaffold(
+        modifier = modifier.fillMaxSize()
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            TibaTextField(
+                value = signUpScreenState.email,
+                onValueChange = {
+                    onEvent(SignUpScreenEvent.OnEmailChange(it))
+                },
+                label = "Email",
+                errorMessage = signUpScreenState.emailError
+            )
+            TibaTextField(
+                value = signUpScreenState.firstName,
+                onValueChange = {
+                    onEvent(SignUpScreenEvent.OnFirstNameChange(it))
+                },
+                label = "First Name",
+                errorMessage = signUpScreenState.firstNameError
+            )
+            TibaTextField(
+                value = signUpScreenState.lastName,
+                onValueChange = {
+                    onEvent(SignUpScreenEvent.OnLastNameChange(it))
+                },
+                label = "Last Name",
+                errorMessage = signUpScreenState.lastNameError
+            )
+            TibaPasswordTextField(
+                value = signUpScreenState.password,
+                onValueChange = {
+                    onEvent(SignUpScreenEvent.OnPasswordChange(it))
+                },
+                label = "Password",
+                isPasswordVisible = signUpScreenState.passwordVisible,
+                onIconButtonClicked = {
+                    onEvent(SignUpScreenEvent.OnPasswordVisibilityChange)
+                },
+                errorMessage = signUpScreenState.passwordError
+            )
+            TibaPasswordTextField(
+                value = signUpScreenState.confirmPassword,
+                onValueChange = {
+                    onEvent(SignUpScreenEvent.OnConfirmPasswordChange(it))
+                },
+                label = "Confirm Password",
+                isPasswordVisible = signUpScreenState.confirmPasswordVisible,
+                onIconButtonClicked = {
+                    onEvent(SignUpScreenEvent.OnConfirmPasswordVisibilityChange)
+                },
+                errorMessage = signUpScreenState.confirmPasswordError
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                AnimatedContent(
+                    targetState = signUpScreenState.isLoading
+                ) { isLoading ->
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(48.dp)
+                        )
+                    } else {
+                        TibaFilledButton(
+                            label = "SIGN UP",
+                            onClick = {
+                                onEvent(SignUpScreenEvent.OnSignUpClick)
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TibaFilledButton(
+    modifier: Modifier = Modifier,
+    label: String,
+    onClick: () -> Unit
+) {
+    Button(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        onClick = onClick,
+        shape = MaterialTheme.shapes.medium,
+    ) {
+        Text(
+            text = label,
+        )
+    }
+}
