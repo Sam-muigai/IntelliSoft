@@ -30,7 +30,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LoginScreen(
     loginScreenViewModel: LoginScreenViewModel = koinViewModel(),
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    onSignInSuccess: (route: String) -> Unit = {}
 ) {
     val loginScreenState = loginScreenViewModel.loginScreenState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
@@ -40,6 +41,10 @@ fun LoginScreen(
             when (event) {
                 is OneTimeEvents.ShowMessage -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is OneTimeEvents.Navigate -> {
+                    onSignInSuccess(event.route)
                 }
 
                 else -> Unit
