@@ -1,4 +1,4 @@
-package com.samkt.intellisoft.ui.theme
+package com.samkt.intellisoft.core.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.samkt.intellisoft.ui.theme
+package com.samkt.intellisoft.core.theme
 
 import android.app.Activity
 import android.os.Build
