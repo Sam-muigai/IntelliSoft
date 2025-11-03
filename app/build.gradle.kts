@@ -77,4 +77,8 @@ dependencies {
     // Kotlinx serialization
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization)
+
+    // datastore
+    implementation(libs.androidx.datastore.preferences.core)
+    implementation(libs.androidx.datastore.preferences)
 }
