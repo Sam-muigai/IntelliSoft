@@ -2,6 +2,7 @@ package com.samkt.intellisoft.features.signUp
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.samkt.intellisoft.core.ui.components.TibaFilledButton
 import com.samkt.intellisoft.core.ui.components.TibaPasswordTextField
 import com.samkt.intellisoft.core.ui.components.TibaTextField
 import com.samkt.intellisoft.utils.OneTimeEvents
@@ -29,7 +31,9 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignUpScreen(
-    signUpViewModel: SignUpViewModel = koinViewModel()
+    signUpViewModel: SignUpViewModel = koinViewModel(),
+    onSignInClick: () -> Unit = {},
+    onSignUpSuccess: () -> Unit = {}
 ) {
     val signUpScreenState = signUpViewModel.signUpScreenState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
@@ -48,7 +52,8 @@ fun SignUpScreen(
 
     SignUpScreenContent(
         signUpScreenState = signUpScreenState,
-        onEvent = signUpViewModel::onEvent
+        onEvent = signUpViewModel::onEvent,
+        onSignInClick = onSignInClick
     )
 }
 
@@ -57,6 +62,7 @@ fun SignUpScreenContent(
     modifier: Modifier = Modifier,
     signUpScreenState: SignUpScreenState,
     onEvent: (SignUpScreenEvent) -> Unit,
+    onSignInClick: () -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize()
@@ -139,25 +145,17 @@ fun SignUpScreenContent(
                     }
                 }
             }
+            Row {
+                Text(
+                    text = "Already have an account? ",
+                )
+                Text(
+                    text = "Sign In",
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.clickable(onClick = onSignInClick)
+                )
+            }
         }
     }
 }
 
-@Composable
-fun TibaFilledButton(
-    modifier: Modifier = Modifier,
-    label: String,
-    onClick: () -> Unit
-) {
-    Button(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        onClick = onClick,
-        shape = MaterialTheme.shapes.medium,
-    ) {
-        Text(
-            text = label,
-        )
-    }
-}
