@@ -80,6 +80,7 @@ fun LoginScreenContent(
                 onValueChange = {
                     onEvent(LoginScreenEvent.OnEmailChange(it))
                 },
+                placeHolder = "example@gmail.com",
                 label = "Email",
                 errorMessage = loginScreenState.emailError
             )
@@ -89,6 +90,7 @@ fun LoginScreenContent(
                     onEvent(LoginScreenEvent.OnPasswordChange(it))
                 },
                 label = "Password",
+                placeHolder = "********",
                 isPasswordVisible = loginScreenState.passwordVisible,
                 onIconButtonClicked = {
                     onEvent(LoginScreenEvent.OnPasswordVisibilityChange)
@@ -110,6 +112,7 @@ fun LoginScreenContent(
                         )
                     } else {
                         TibaFilledButton(
+                            modifier = Modifier.fillMaxWidth(),
                             label = "LOGIN",
                             onClick = {
                                 onEvent(LoginScreenEvent.OnLoginButtonClick)

@@ -137,6 +137,7 @@ fun SignUpScreenContent(
                         )
                     } else {
                         TibaFilledButton(
+                            modifier = Modifier.fillMaxWidth(),
                             label = "SIGN UP",
                             onClick = {
                                 onEvent(SignUpScreenEvent.OnSignUpClick)

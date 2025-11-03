@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -23,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.samkt.intellisoft.core.ui.components.TibaFilledButton
 import com.samkt.intellisoft.domain.model.User
 import org.koin.androidx.compose.koinViewModel
 
@@ -76,7 +78,15 @@ fun HomeScreenContent(
                             )
                         }
                     }
-                }
+                },
+            )
+        },
+        floatingActionButton = {
+            TibaFilledButton(
+                onClick = {
+
+                },
+                label = "+ ADD NEW PATIENT"
             )
         }
     ) { innerPadding ->
@@ -87,7 +97,7 @@ fun HomeScreenContent(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(text = "Welcome to the Home Screen")
+
         }
     }
 }
