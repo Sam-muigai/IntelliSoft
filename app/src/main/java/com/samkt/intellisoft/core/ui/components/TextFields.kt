@@ -51,7 +51,8 @@ fun TibaTextField(
     onValueChange: (String) -> Unit,
     placeHolder: String = "",
     label: String? = null,
-    errorMessage: String? = null
+    errorMessage: String? = null,
+    enabled: Boolean = true
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -77,6 +78,8 @@ fun TibaTextField(
                     style = MaterialTheme.typography.bodyMedium,
                 )
             },
+            enabled = enabled,
+            readOnly = !enabled
         )
         AnimatedVisibility(
             errorMessage != null

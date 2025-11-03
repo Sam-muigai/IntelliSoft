@@ -10,6 +10,13 @@ class VitalsScreenViewModel : ViewModel() {
     private val _vitalsScreenState = MutableStateFlow(VitalsScreenState())
     val vitalsScreenState = _vitalsScreenState.asStateFlow()
 
+
+    init {
+        _vitalsScreenState.update {
+            it.copy(patientName = "John Doe")
+        }
+    }
+
     fun onEvent(event: VitalsScreenEvent) {
         when (event) {
             is VitalsScreenEvent.OnHeightChange -> {

@@ -75,7 +75,11 @@ fun App() {
         composable(
             route = Screens.Vitals.route
         ) {
-            VitalsScreen()
+            VitalsScreen(
+                onBackClick = {
+                    navHostController.popBackStack()
+                }
+            )
         }
     }
 }
