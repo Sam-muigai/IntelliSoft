@@ -9,6 +9,7 @@ import com.samkt.intellisoft.features.patientRegistration.PatientRegistrationScr
 import com.samkt.intellisoft.features.home.HomeScreen
 import com.samkt.intellisoft.features.login.LoginScreen
 import com.samkt.intellisoft.features.signUp.SignUpScreen
+import com.samkt.intellisoft.features.vitals.VitalsScreen
 
 
 @Composable
@@ -64,8 +65,17 @@ fun App() {
             PatientRegistrationScreen(
                 onBackClick = {
                     navHostController.popBackStack()
+                },
+                onNavigate = { route ->
+                    navHostController.navigate(route)
                 }
             )
+        }
+
+        composable(
+            route = Screens.Vitals.route
+        ) {
+            VitalsScreen()
         }
     }
 }

@@ -1,14 +1,22 @@
 package com.samkt.intellisoft.features.patientRegistration
 
 import androidx.lifecycle.ViewModel
+import com.samkt.intellisoft.features.navigation.Screens
+import com.samkt.intellisoft.utils.OneTimeEvents
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 
 class PatientRegistrationScreenViewModel : ViewModel() {
 
     private val _addPatientScreenState = MutableStateFlow(AddPatientScreenState())
     val addPatientScreenState = _addPatientScreenState.asStateFlow()
+
+
+    private val _oneTimeEvent = Channel<OneTimeEvents>()
+    val oneTimeEvents = _oneTimeEvent.receiveAsFlow()
 
     fun onEvent(
         event: AddPatientScreenEvent
@@ -115,10 +123,11 @@ class PatientRegistrationScreenViewModel : ViewModel() {
                     return@apply
                 }
             }
+            _oneTimeEvent.trySend(OneTimeEvents.Navigate(Screens.Vitals.route))
         }
     }
 
-    private fun clearErrorState(){
+    private fun clearErrorState() {
         _addPatientScreenState.update {
             it.copy(
                 patientNumberError = null,

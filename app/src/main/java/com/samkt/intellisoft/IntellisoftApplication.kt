@@ -8,6 +8,7 @@ import com.samkt.intellisoft.features.patientRegistration.di.patientRegistration
 import com.samkt.intellisoft.features.home.di.homeModule
 import com.samkt.intellisoft.features.login.di.loginModule
 import com.samkt.intellisoft.features.signUp.di.signUpModule
+import com.samkt.intellisoft.features.vitals.di.vitalsModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -23,6 +24,7 @@ class IntellisoftApplication : Application() {
             loginModule,
             homeModule,
             patientRegistrationModule,
+            vitalsModule,
             preferencesModule
         )
         startKoin {
