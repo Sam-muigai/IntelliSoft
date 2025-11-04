@@ -1,6 +1,11 @@
 package com.samkt.intellisoft.features.vitals
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.samkt.intellisoft.domain.model.Vitals
+import com.samkt.intellisoft.domain.repositories.PatientRepository
+import com.samkt.intellisoft.features.navigation.NavArguments
 import com.samkt.intellisoft.features.navigation.Screens
 import com.samkt.intellisoft.utils.OneTimeEvents
 import kotlinx.coroutines.channels.Channel
@@ -8,22 +13,34 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 
-class VitalsScreenViewModel : ViewModel() {
+class VitalsScreenViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val patientRepository: PatientRepository
+) : ViewModel() {
 
     private val _vitalsScreenState = MutableStateFlow(VitalsScreenState())
     val vitalsScreenState = _vitalsScreenState.asStateFlow()
 
+    init {
+        val patientId = savedStateHandle.get<Int>(NavArguments.PATIENT_ID) ?: 0
+        _vitalsScreenState.update {
+            it.copy(patientId = patientId)
+        }
+        viewModelScope.launch {
+            patientRepository.getPatient(patientId).collect { patient ->
+                _vitalsScreenState.update {
+                    it.copy(patientName = "${patient.firstName} ${patient.lastName}")
+                }
+            }
+        }
+    }
 
     private val _oneTimeEvents = Channel<OneTimeEvents>()
     val oneTimeEvents = _oneTimeEvents.receiveAsFlow()
 
-
-    init {
-        _vitalsScreenState.update {
-            it.copy(patientName = "John Doe")
-        }
-    }
 
     fun onEvent(event: VitalsScreenEvent) {
         when (event) {
@@ -79,7 +96,23 @@ class VitalsScreenViewModel : ViewModel() {
                     return@apply
                 }
             }
-            _oneTimeEvents.trySend(OneTimeEvents.Navigate(Screens.Assessment.createRoute(bmi)))
+            viewModelScope.launch {
+                val vitals = Vitals(
+                    height = height,
+                    weight = weight,
+                    patientId = patientId,
+                    visitDate = LocalDate.parse(visitDate),
+                )
+                patientRepository.saveVitalsInformation(vitals)
+                _oneTimeEvents.trySend(
+                    OneTimeEvents.Navigate(
+                        Screens.Assessment.createRoute(
+                            bmi,
+                            vitalsScreenState.value.patientId
+                        )
+                    )
+                )
+            }
         }
     }
 
@@ -108,7 +141,8 @@ data class VitalsScreenState(
     val heightError: String? = null,
     val weight: String = "",
     val weightError: String? = null,
-    val bmi: String = ""
+    val bmi: String = "",
+    val patientId: Int = 0
 )
 
 sealed interface VitalsScreenEvent {

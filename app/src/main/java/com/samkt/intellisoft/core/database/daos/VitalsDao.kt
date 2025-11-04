@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface VitalsDao {
 
-    @Insert
-    suspend fun insertVitals(vitalsEntity: VitalsEntity)
+    @Insert(onConflict = androidx.room.OnConflictStrategy.REPLACE)
+    suspend fun saveVitals(vitalsEntity: VitalsEntity): Long
 
     @Query("SELECT * FROM vitals WHERE patientId = :patientId")
     fun getVitals(patientId: Int): Flow<List<VitalsEntity>>

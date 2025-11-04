@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface PatientsDao {
 
     @Insert(onConflict = androidx.room.OnConflictStrategy.REPLACE)
-    suspend fun savePatient(patientEntity: PatientEntity)
+    suspend fun savePatient(patientEntity: PatientEntity): Long
 
     @Query("SELECT * FROM patients WHERE id = :patientId")
     fun getPatientById(patientId: Int): Flow<PatientEntity>

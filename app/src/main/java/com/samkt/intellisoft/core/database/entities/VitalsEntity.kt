@@ -24,5 +24,6 @@ data class VitalsEntity(
     val weight: String,
     val patientId: Int,
     val patientBackendId: String = "",
-    val isSynced: Boolean = false
+    val isSynced: Boolean = false,
+    val visitDate: LocalDate
 )

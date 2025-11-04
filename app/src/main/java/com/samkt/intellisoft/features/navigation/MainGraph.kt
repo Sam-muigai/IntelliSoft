@@ -65,7 +65,7 @@ fun App() {
         navigation(
             startDestination = Screens.AddNewPatient.route,
             route = Screens.AddNewPatientInfo.route
-        ){
+        ) {
             composable(
                 route = Screens.AddNewPatient.route
             ) {
@@ -80,7 +80,14 @@ fun App() {
             }
 
             composable(
-                route = Screens.Vitals.route
+                route = Screens.Vitals.route,
+                arguments = listOf(
+                    navArgument(
+                        name = NavArguments.PATIENT_ID
+                    ) {
+                        type = NavType.IntType
+                    }
+                )
             ) {
                 VitalsScreen(
                     onBackClick = {
@@ -99,6 +106,11 @@ fun App() {
                         name = NavArguments.BMI
                     ) {
                         type = NavType.StringType
+                    },
+                    navArgument(
+                        name = NavArguments.PATIENT_ID
+                    ) {
+                        type = NavType.IntType
                     }
                 )
             ) {

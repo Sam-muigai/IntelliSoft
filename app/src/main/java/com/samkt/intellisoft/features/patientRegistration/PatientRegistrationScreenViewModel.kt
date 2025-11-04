@@ -139,8 +139,8 @@ class PatientRegistrationScreenViewModel(
                     dateOfBirth = LocalDate.parse(registrationDate),
                     gender = gender
                 )
-                patientRepository.savePatient(patient)
-                _oneTimeEvent.send(OneTimeEvents.Navigate(Screens.Vitals.route))
+                val patientId = patientRepository.savePatient(patient)
+                _oneTimeEvent.send(OneTimeEvents.Navigate(Screens.Vitals.createRoute(patientId)))
             }
         }
     }
