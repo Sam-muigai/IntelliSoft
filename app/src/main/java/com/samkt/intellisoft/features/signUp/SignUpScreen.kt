@@ -9,12 +9,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -41,7 +39,7 @@ import org.koin.androidx.compose.koinViewModel
 fun SignUpScreen(
     signUpViewModel: SignUpViewModel = koinViewModel(),
     onSignInClick: () -> Unit = {},
-    onSignUpSuccess: () -> Unit = {}
+    onSignUpSuccess: () -> Unit = {},
 ) {
     val signUpScreenState = signUpViewModel.signUpScreenState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
@@ -65,7 +63,7 @@ fun SignUpScreen(
     SignUpScreenContent(
         signUpScreenState = signUpScreenState,
         onEvent = signUpViewModel::onEvent,
-        onSignInClick = onSignInClick
+        onSignInClick = onSignInClick,
     )
 }
 
@@ -74,10 +72,10 @@ fun SignUpScreenContent(
     modifier: Modifier = Modifier,
     signUpScreenState: SignUpScreenState,
     onEvent: (SignUpScreenEvent) -> Unit,
-    onSignInClick: () -> Unit = {}
+    onSignInClick: () -> Unit = {},
 ) {
     Scaffold(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -86,7 +84,7 @@ fun SignUpScreenContent(
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -95,14 +93,14 @@ fun SignUpScreenContent(
                     painter = painterResource(R.drawable.logo),
                     contentDescription = "Logo",
                     modifier = Modifier.size(180.dp),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
                 )
                 Text(
                     text = "IntelliSoft",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.ExtraBold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                        color = MaterialTheme.colorScheme.primary,
+                    ),
                 )
             }
             TibaTextField(
@@ -112,7 +110,7 @@ fun SignUpScreenContent(
                 },
                 label = "Email",
                 placeHolder = "example@gmail.com",
-                errorMessage = signUpScreenState.emailError
+                errorMessage = signUpScreenState.emailError,
             )
             TibaTextField(
                 value = signUpScreenState.firstName,
@@ -121,7 +119,7 @@ fun SignUpScreenContent(
                 },
                 label = "First Name",
                 placeHolder = "Enter your first name",
-                errorMessage = signUpScreenState.firstNameError
+                errorMessage = signUpScreenState.firstNameError,
             )
             TibaTextField(
                 value = signUpScreenState.lastName,
@@ -130,7 +128,7 @@ fun SignUpScreenContent(
                 },
                 label = "Last Name",
                 placeHolder = "Enter your last name",
-                errorMessage = signUpScreenState.lastNameError
+                errorMessage = signUpScreenState.lastNameError,
             )
             TibaPasswordTextField(
                 value = signUpScreenState.password,
@@ -143,7 +141,7 @@ fun SignUpScreenContent(
                 onIconButtonClicked = {
                     onEvent(SignUpScreenEvent.OnPasswordVisibilityChange)
                 },
-                errorMessage = signUpScreenState.passwordError
+                errorMessage = signUpScreenState.passwordError,
             )
             TibaPasswordTextField(
                 value = signUpScreenState.confirmPassword,
@@ -156,20 +154,20 @@ fun SignUpScreenContent(
                 onIconButtonClicked = {
                     onEvent(SignUpScreenEvent.OnConfirmPasswordVisibilityChange)
                 },
-                errorMessage = signUpScreenState.confirmPasswordError
+                errorMessage = signUpScreenState.confirmPasswordError,
             )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
                 AnimatedContent(
-                    targetState = signUpScreenState.isLoading
+                    targetState = signUpScreenState.isLoading,
                 ) { isLoading ->
                     if (isLoading) {
                         CircularProgressIndicator(
-                            modifier = Modifier.size(48.dp)
+                            modifier = Modifier.size(48.dp),
                         )
                     } else {
                         TibaFilledButton(
@@ -177,13 +175,13 @@ fun SignUpScreenContent(
                             label = "SIGN UP",
                             onClick = {
                                 onEvent(SignUpScreenEvent.OnSignUpClick)
-                            }
+                            },
                         )
                     }
                 }
             }
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
                     text = "Already have an account? ",
@@ -193,10 +191,9 @@ fun SignUpScreenContent(
                     text = "Sign In",
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.clickable(onClick = onSignInClick)
+                    modifier = Modifier.clickable(onClick = onSignInClick),
                 )
             }
         }
     }
 }
-

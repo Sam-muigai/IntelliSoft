@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginScreenViewModel(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _loginScreenState = MutableStateFlow(LoginScreenState())
@@ -45,7 +45,7 @@ class LoginScreenViewModel(
             LoginScreenEvent.OnPasswordVisibilityChange -> {
                 _loginScreenState.update {
                     it.copy(
-                        passwordVisible = !loginScreenState.value.passwordVisible
+                        passwordVisible = !loginScreenState.value.passwordVisible,
                     )
                 }
             }
@@ -80,7 +80,7 @@ class LoginScreenViewModel(
                 password.length < 8 -> {
                     _loginScreenState.update {
                         it.copy(
-                            passwordError = "Password must be at least 8 characters"
+                            passwordError = "Password must be at least 8 characters",
                         )
                     }
                     return@apply
@@ -88,20 +88,20 @@ class LoginScreenViewModel(
             }
             _loginScreenState.update {
                 it.copy(
-                    isLoading = true
+                    isLoading = true,
                 )
             }
 
             viewModelScope.launch {
                 val login = Login(
                     email = email,
-                    password = password
+                    password = password,
                 )
                 when (val result = authRepository.login(login)) {
                     is Result.Error -> {
                         _loginScreenState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                         _oneTimeEvents.send(OneTimeEvents.ShowMessage(result.message))
@@ -110,7 +110,7 @@ class LoginScreenViewModel(
                     is Result.Success -> {
                         _loginScreenState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                         _oneTimeEvents.send(OneTimeEvents.ShowMessage(result.data))
@@ -125,7 +125,7 @@ class LoginScreenViewModel(
         _loginScreenState.update {
             it.copy(
                 emailError = null,
-                passwordError = null
+                passwordError = null,
             )
         }
     }

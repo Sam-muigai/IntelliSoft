@@ -18,7 +18,6 @@ val geistMono = FontFamily(
     Font(R.font.geist_mono_extra_light, FontWeight.ExtraLight),
 )
 
-
 val baseline = Typography()
 
 val Typography = Typography(
@@ -38,4 +37,3 @@ val Typography = Typography(
     labelMedium = baseline.labelMedium.copy(fontFamily = geistMono),
     labelSmall = baseline.labelSmall.copy(fontFamily = geistMono),
 )
-

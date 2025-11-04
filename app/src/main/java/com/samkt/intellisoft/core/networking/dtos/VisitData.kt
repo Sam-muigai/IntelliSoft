@@ -1,6 +1,5 @@
 package com.samkt.intellisoft.core.networking.dtos
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,5 +12,5 @@ data class VisitData(
     @SerialName("name")
     val name: String,
     @SerialName("status")
-    val status: String
+    val status: String,
 )

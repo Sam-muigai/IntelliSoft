@@ -9,7 +9,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "app_prefs")
 
 interface AppPreferences {
@@ -23,9 +22,8 @@ interface AppPreferences {
     fun getEmail(): Flow<String>
 }
 
-
 class AppPreferencesImpl(
-    private val context: Context
+    private val context: Context,
 ) : AppPreferences {
     override suspend fun saveAccessToken(token: String) {
         context.dataStore.edit {

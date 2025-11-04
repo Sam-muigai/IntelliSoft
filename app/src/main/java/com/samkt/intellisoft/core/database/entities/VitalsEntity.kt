@@ -5,7 +5,6 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import java.time.LocalDate
 
-
 @Entity(
     tableName = "vitals",
     foreignKeys = [
@@ -13,9 +12,9 @@ import java.time.LocalDate
             entity = PatientEntity::class,
             parentColumns = ["id"],
             childColumns = ["patientId"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
 )
 data class VitalsEntity(
     @PrimaryKey(autoGenerate = true)
@@ -25,5 +24,5 @@ data class VitalsEntity(
     val patientId: Int,
     val patientBackendId: String = "",
     val isSynced: Boolean = false,
-    val visitDate: LocalDate
+    val visitDate: LocalDate,
 )

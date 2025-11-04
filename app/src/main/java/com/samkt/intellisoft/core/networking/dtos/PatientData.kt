@@ -1,6 +1,5 @@
 package com.samkt.intellisoft.core.networking.dtos
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -23,5 +22,5 @@ data class PatientData(
     @SerialName("unique")
     val unique: String,
     @SerialName("updated_at")
-    val updatedAt: String
+    val updatedAt: String,
 )

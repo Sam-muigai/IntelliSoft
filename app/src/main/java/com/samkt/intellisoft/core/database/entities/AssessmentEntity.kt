@@ -12,9 +12,9 @@ import java.time.LocalDate
             entity = VitalsEntity::class,
             parentColumns = ["id"],
             childColumns = ["vitalId"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
 )
 data class AssessmentEntity(
     @PrimaryKey(autoGenerate = true)
@@ -27,5 +27,5 @@ data class AssessmentEntity(
     val patientBackendId: String = "",
     val vitalBackendId: String = "",
     val vitalId: Int,
-    val isSynced: Boolean = false
+    val isSynced: Boolean = false,
 )

@@ -1,11 +1,11 @@
 package com.samkt.intellisoft.domain.repositories
 
+import com.samkt.intellisoft.domain.helpers.Result
 import com.samkt.intellisoft.domain.model.Assessment
 import com.samkt.intellisoft.domain.model.Patient
+import com.samkt.intellisoft.domain.model.Visit
 import com.samkt.intellisoft.domain.model.Vitals
 import kotlinx.coroutines.flow.Flow
-import com.samkt.intellisoft.domain.helpers.Result
-import com.samkt.intellisoft.domain.model.Visit
 
 interface PatientRepository {
 

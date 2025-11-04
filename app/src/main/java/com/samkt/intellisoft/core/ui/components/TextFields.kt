@@ -53,16 +53,16 @@ fun TibaTextField(
     label: String? = null,
     errorMessage: String? = null,
     enabled: Boolean = true,
-    minLines:Int = 1,
+    minLines: Int = 1,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         label?.let {
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
                 ),
             )
             Spacer(Modifier.height(8.dp))
@@ -81,10 +81,10 @@ fun TibaTextField(
             },
             enabled = enabled,
             readOnly = !enabled,
-            minLines = minLines
+            minLines = minLines,
         )
         AnimatedVisibility(
-            errorMessage != null
+            errorMessage != null,
         ) {
             Column {
                 Spacer(Modifier.height(4.dp))
@@ -93,7 +93,7 @@ fun TibaTextField(
                         text = errorMessage,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.error
+                            color = MaterialTheme.colorScheme.error,
                         ),
                     )
                 }
@@ -111,16 +111,16 @@ fun TibaPasswordTextField(
     label: String? = null,
     onIconButtonClicked: () -> Unit,
     isPasswordVisible: Boolean,
-    errorMessage: String? = null
+    errorMessage: String? = null,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         label?.let {
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
                 ),
             )
             Spacer(Modifier.height(8.dp))
@@ -160,7 +160,7 @@ fun TibaPasswordTextField(
             },
         )
         AnimatedVisibility(
-            errorMessage != null
+            errorMessage != null,
         ) {
             Column {
                 Spacer(Modifier.height(4.dp))
@@ -169,7 +169,7 @@ fun TibaPasswordTextField(
                         text = errorMessage,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.error
+                            color = MaterialTheme.colorScheme.error,
                         ),
                     )
                 }
@@ -177,8 +177,6 @@ fun TibaPasswordTextField(
         }
     }
 }
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -231,7 +229,6 @@ fun TibaDropDown(
                 colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
             )
 
-
             ExposedDropdownMenu(
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded = false },
@@ -271,7 +268,6 @@ fun TibaDropDown(
         }
     }
 }
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -341,7 +337,6 @@ fun TibaDatePicker(
                     ),
             )
         }
-
 
         AnimatedVisibility(
             errorMessage != null,

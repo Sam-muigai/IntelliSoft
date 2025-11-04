@@ -16,22 +16,20 @@ import com.samkt.intellisoft.domain.model.SignUp
 import com.samkt.intellisoft.domain.model.Visit
 import com.samkt.intellisoft.domain.model.Vitals
 import com.samkt.intellisoft.utils.formatDate
-import kotlinx.coroutines.flow.update
-
 
 fun SignUp.toData(): SignUpRequest {
     return SignUpRequest(
         email = email,
         password = password,
         firstname = firstname,
-        lastname = lastname
+        lastname = lastname,
     )
 }
 
 fun Login.toData(): LoginRequest {
     return LoginRequest(
         email = email,
-        password = password
+        password = password,
     )
 }
 
@@ -54,10 +52,9 @@ fun Patient.toData(): AddPatientRequest {
         gender = gender,
         lastname = lastName,
         regDate = registrationDate.formatDate(),
-        unique = patientNumber
+        unique = patientNumber,
     )
 }
-
 
 fun PatientEntity.toDomain(): Patient {
     return Patient(
@@ -67,7 +64,7 @@ fun PatientEntity.toDomain(): Patient {
         gender = gender,
         registrationDate = registrationDate,
         dateOfBirth = dateOfBirth,
-        id = id
+        id = id,
     )
 }
 
@@ -77,10 +74,9 @@ fun Vitals.toEntity(): VitalsEntity {
         height = height,
         weight = weight,
         visitDate = visitDate,
-        patientId = patientId
+        patientId = patientId,
     )
 }
-
 
 fun VitalsEntity.toDomain(): Vitals {
     return Vitals(
@@ -89,7 +85,7 @@ fun VitalsEntity.toDomain(): Vitals {
         weight = weight,
         visitDate = visitDate,
         patientId = patientId,
-        patientBackendId = patientBackendId
+        patientBackendId = patientBackendId,
     )
 }
 
@@ -99,7 +95,7 @@ fun Vitals.toData(): SaveVitalsRequest {
         height = height,
         patientId = patientBackendId,
         visitDate = visitDate.formatDate(),
-        weight = weight
+        weight = weight,
     )
 }
 
@@ -115,7 +111,6 @@ fun Assessment.toEntity(): AssessmentEntity {
     )
 }
 
-
 fun AssessmentEntity.toDomain(): Assessment {
     return Assessment(
         id = id,
@@ -126,7 +121,7 @@ fun AssessmentEntity.toDomain(): Assessment {
         visitDate = visitDate,
         vitalId = vitalId,
         patientBackendId = patientBackendId,
-        vitalsBackendId = vitalBackendId
+        vitalsBackendId = vitalBackendId,
     )
 }
 
@@ -138,20 +133,18 @@ fun Assessment.toData(): SaveVisitRequest {
         onDrugs = onDrugs,
         patientId = patientBackendId,
         visitDate = visitDate.formatDate(),
-        vitalId = vitalsBackendId
+        vitalId = vitalsBackendId,
     )
 }
-
 
 fun VisitData.toDomain(): Visit {
     return Visit(
         age = age,
         bmiStatus = bmi.getBmiStatus(),
         status = status,
-        name = name
+        name = name,
     )
 }
-
 
 private fun String.getBmiStatus(): String {
     val bmi = this.toDoubleOrNull() ?: 0.0
@@ -164,7 +157,7 @@ private fun String.getBmiStatus(): String {
 
 private fun calculateBmi(
     height: String,
-    weight: String
+    weight: String,
 ): String {
     val heightInCm = height.toDoubleOrNull() ?: 0.0
     val weightInKg = weight.toDoubleOrNull() ?: 0.0

@@ -11,6 +11,7 @@ import com.samkt.intellisoft.core.networking.helpers.ApiResponse
 import com.samkt.intellisoft.data.mappers.toData
 import com.samkt.intellisoft.data.mappers.toDomain
 import com.samkt.intellisoft.data.mappers.toEntity
+import com.samkt.intellisoft.domain.helpers.Result
 import com.samkt.intellisoft.domain.model.Assessment
 import com.samkt.intellisoft.domain.model.Patient
 import com.samkt.intellisoft.domain.model.Visit
@@ -22,11 +23,10 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import com.samkt.intellisoft.domain.helpers.Result
 
 class PatientRepositoryImpl(
     db: IntellisoftDatabase,
-    private val intellisoftApiService: IntellisoftApiService
+    private val intellisoftApiService: IntellisoftApiService,
 ) : PatientRepository {
     private val patientDao = db.patientDao()
     private val vitalsDao = db.vitalsDao()
@@ -99,7 +99,7 @@ class PatientRepositoryImpl(
                 updateAssessmentBackendIds(
                     assessmentId = assessment.id,
                     patientBackendId = vitalsEntity.patientBackendId,
-                    vitalsBackendId = response.saveVitalsData.id.toString()
+                    vitalsBackendId = response.saveVitalsData.id.toString(),
                 )
             }
             val assessments = assessmentDao.getAssessmentsByVitalId(vitalsEntity.id).first()
@@ -110,7 +110,7 @@ class PatientRepositoryImpl(
     }
 
     private suspend fun syncAssessments(
-        assessments: List<AssessmentEntity>
+        assessments: List<AssessmentEntity>,
     ) {
         coroutineScope {
             val assessmentTask = assessments.map { assessment ->
@@ -133,19 +133,19 @@ class PatientRepositoryImpl(
     private suspend fun updateVitalsBackedId(patientId: Int, patientBackendId: String) {
         vitalsDao.setPatientBackendId(
             patientId = patientId,
-            patientBackendId = patientBackendId
+            patientBackendId = patientBackendId,
         )
     }
 
     private suspend fun updateAssessmentBackendIds(
         assessmentId: Int,
         patientBackendId: String,
-        vitalsBackendId: String
+        vitalsBackendId: String,
     ) {
         assessmentDao.setBackendIdsForAssessment(
             assessmentId = assessmentId,
             patientBackendId = patientBackendId,
-            vitalBackendId = vitalsBackendId
+            vitalBackendId = vitalsBackendId,
         )
     }
 

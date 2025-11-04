@@ -12,7 +12,6 @@ import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-
 fun getKtorClient() = HttpClient {
     install(ContentNegotiation) {
         json(

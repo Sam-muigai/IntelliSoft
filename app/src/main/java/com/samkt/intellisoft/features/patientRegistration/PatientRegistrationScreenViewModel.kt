@@ -16,24 +16,23 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class PatientRegistrationScreenViewModel(
-    private val patientRepository: PatientRepository
+    private val patientRepository: PatientRepository,
 ) : ViewModel() {
 
     private val _addPatientScreenState = MutableStateFlow(AddPatientScreenState())
     val addPatientScreenState = _addPatientScreenState.asStateFlow()
 
-
     private val _oneTimeEvent = Channel<OneTimeEvents>()
     val oneTimeEvents = _oneTimeEvent.receiveAsFlow()
 
     fun onEvent(
-        event: AddPatientScreenEvent
+        event: AddPatientScreenEvent,
     ) {
         when (event) {
             is AddPatientScreenEvent.OnPatientNumberChange -> {
                 _addPatientScreenState.update {
                     it.copy(
-                        patientNumber = event.number
+                        patientNumber = event.number,
                     )
                 }
             }
@@ -41,7 +40,7 @@ class PatientRegistrationScreenViewModel(
             is AddPatientScreenEvent.OnFirstNameChange -> {
                 _addPatientScreenState.update {
                     it.copy(
-                        firstName = event.firstName
+                        firstName = event.firstName,
                     )
                 }
             }
@@ -49,7 +48,7 @@ class PatientRegistrationScreenViewModel(
             is AddPatientScreenEvent.OnLastNameChange -> {
                 _addPatientScreenState.update {
                     it.copy(
-                        lastName = event.lastName
+                        lastName = event.lastName,
                     )
                 }
             }
@@ -57,7 +56,7 @@ class PatientRegistrationScreenViewModel(
             is AddPatientScreenEvent.OnDobChange -> {
                 _addPatientScreenState.update {
                     it.copy(
-                        dob = event.dob
+                        dob = event.dob,
                     )
                 }
             }
@@ -65,7 +64,7 @@ class PatientRegistrationScreenViewModel(
             is AddPatientScreenEvent.OnGenderChange -> {
                 _addPatientScreenState.update {
                     it.copy(
-                        gender = event.gender
+                        gender = event.gender,
                     )
                 }
             }
@@ -78,7 +77,7 @@ class PatientRegistrationScreenViewModel(
             is AddPatientScreenEvent.OnRegistrationDateChange -> {
                 _addPatientScreenState.update {
                     it.copy(
-                        registrationDate = event.date
+                        registrationDate = event.date,
                     )
                 }
             }
@@ -136,7 +135,6 @@ class PatientRegistrationScreenViewModel(
                     _addPatientScreenState.update {
                         it.copy(patientNumberError = "Patient is already registered")
                     }
-
                 } else {
                     val patient = Patient(
                         id = patientId,
@@ -145,13 +143,13 @@ class PatientRegistrationScreenViewModel(
                         firstName = firstName,
                         lastName = lastName,
                         dateOfBirth = LocalDate.parse(dob),
-                        gender = gender
+                        gender = gender,
                     )
 
                     val savedPatientId = patientRepository.savePatient(patient)
                     _addPatientScreenState.update {
                         it.copy(
-                            patientId = savedPatientId
+                            patientId = savedPatientId,
                         )
                     }
                     _oneTimeEvent.send(OneTimeEvents.Navigate(Screens.Vitals.createRoute(savedPatientId)))
@@ -168,12 +166,11 @@ class PatientRegistrationScreenViewModel(
                 firstNameError = null,
                 lastNameError = null,
                 dobError = null,
-                genderError = null
+                genderError = null,
             )
         }
     }
 }
-
 
 data class AddPatientScreenState(
     val patientNumber: String = "",
@@ -188,7 +185,7 @@ data class AddPatientScreenState(
     val dobError: String? = null,
     val gender: String = "",
     val genderError: String? = null,
-    val patientId: Int = 0
+    val patientId: Int = 0,
 )
 
 sealed interface AddPatientScreenEvent {

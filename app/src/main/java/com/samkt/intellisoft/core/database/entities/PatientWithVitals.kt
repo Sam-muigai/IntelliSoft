@@ -10,7 +10,7 @@ class PatientWithVitals(
     @Relation(
         entity = VitalsEntity::class,
         parentColumn = "id",
-        entityColumn = "patientId"
+        entityColumn = "patientId",
     )
-    val vitalsWithAssessments: List<VitalsWithAssessments>
+    val vitalsWithAssessments: List<VitalsWithAssessments>,
 )

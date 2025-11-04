@@ -4,16 +4,15 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
 
-
 @Entity(tableName = "patients")
 data class PatientEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val patientNumber: String,
     val registrationDate: LocalDate,
-    val firstName:String,
-    val lastName:String,
+    val firstName: String,
+    val lastName: String,
     val dateOfBirth: LocalDate,
     val gender: String,
-    val isSynced: Boolean = false
+    val isSynced: Boolean = false,
 )

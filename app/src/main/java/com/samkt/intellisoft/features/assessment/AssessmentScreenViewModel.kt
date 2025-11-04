@@ -17,7 +17,7 @@ import java.time.LocalDate
 
 class AssessmentScreenViewModel(
     savedStateHandle: SavedStateHandle,
-    private val patientRepository: PatientRepository
+    private val patientRepository: PatientRepository,
 ) : ViewModel() {
 
     private val _assessmentScreenState = MutableStateFlow(AssessmentScreenState())
@@ -32,13 +32,12 @@ class AssessmentScreenViewModel(
                     it.copy(
                         patientName = "${patient?.firstName} ${patient?.lastName}",
                         patientId = patientId,
-                        vitalsId = vitalsId
+                        vitalsId = vitalsId,
                     )
                 }
             }
         }
     }
-
 
     private val _oneTimeEvents = Channel<OneTimeEvents>()
     val oneTimeEvents = _oneTimeEvents.receiveAsFlow()
@@ -87,7 +86,7 @@ class AssessmentScreenViewModel(
                 visitDate.isEmpty() -> {
                     _assessmentScreenState.update {
                         it.copy(
-                            visitDateError = "Please provide a visit date"
+                            visitDateError = "Please provide a visit date",
                         )
                     }
                     return@apply
@@ -95,7 +94,7 @@ class AssessmentScreenViewModel(
                 comment.isEmpty() -> {
                     _assessmentScreenState.update {
                         it.copy(
-                            commentError = "Please provide a comment"
+                            commentError = "Please provide a comment",
                         )
                     }
                     return@apply
@@ -127,7 +126,6 @@ class AssessmentScreenViewModel(
     }
 }
 
-
 data class AssessmentScreenState(
     val isLoading: Boolean = false,
     val patientName: String = "",
@@ -141,7 +139,7 @@ data class AssessmentScreenState(
     val isOverweight: Boolean = false,
     val patientId: Int = 0,
     val vitalsId: Int = 0,
-    val assessmentId: Int = 0
+    val assessmentId: Int = 0,
 )
 
 sealed interface AssessmentScreenEvent {

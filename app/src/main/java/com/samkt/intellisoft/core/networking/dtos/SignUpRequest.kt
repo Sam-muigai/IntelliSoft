@@ -1,6 +1,5 @@
 package com.samkt.intellisoft.core.networking.dtos
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,5 +12,5 @@ data class SignUpRequest(
     @SerialName("lastname")
     val lastname: String,
     @SerialName("password")
-    val password: String
+    val password: String,
 )

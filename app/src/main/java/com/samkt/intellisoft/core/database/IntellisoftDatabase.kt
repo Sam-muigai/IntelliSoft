@@ -10,15 +10,14 @@ import com.samkt.intellisoft.core.database.entities.AssessmentEntity
 import com.samkt.intellisoft.core.database.entities.PatientEntity
 import com.samkt.intellisoft.core.database.entities.VitalsEntity
 
-
 @Database(
     entities = [
         AssessmentEntity::class,
         PatientEntity::class,
-        VitalsEntity::class
+        VitalsEntity::class,
     ],
     version = 1,
-    exportSchema = false
+    exportSchema = false,
 )
 @TypeConverters(Converters::class)
 abstract class IntellisoftDatabase : RoomDatabase() {

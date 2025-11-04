@@ -8,5 +8,5 @@ data class Vitals(
     val weight: String,
     val patientId: Int,
     val visitDate: LocalDate,
-    val patientBackendId: String = ""
+    val patientBackendId: String = "",
 )

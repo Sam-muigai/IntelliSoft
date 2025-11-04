@@ -32,7 +32,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.samkt.intellisoft.core.ui.components.TibaDatePicker
 import com.samkt.intellisoft.core.ui.components.TibaFilledButton
 import com.samkt.intellisoft.core.ui.components.TibaTextField
-import com.samkt.intellisoft.features.login.LoginScreenEvent
 import com.samkt.intellisoft.utils.OneTimeEvents
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -42,7 +41,7 @@ fun AssessmentScreen(
     assessmentScreenViewModel: AssessmentScreenViewModel = koinViewModel(),
     bmi: Double,
     onBackClick: () -> Unit = {},
-    onSaveSuccess: () -> Unit = {}
+    onSaveSuccess: () -> Unit = {},
 ) {
     val assessmentScreenState =
         assessmentScreenViewModel.assessmentScreenState.collectAsStateWithLifecycle().value
@@ -66,7 +65,7 @@ fun AssessmentScreen(
         isOverweight = bmi >= 25,
         onBackClick = onBackClick,
         assessmentScreenState = assessmentScreenState,
-        onEvent = assessmentScreenViewModel::onEvent
+        onEvent = assessmentScreenViewModel::onEvent,
     )
 }
 
@@ -77,7 +76,7 @@ fun AssessmentScreenContent(
     isOverweight: Boolean,
     onBackClick: () -> Unit = {},
     assessmentScreenState: AssessmentScreenState,
-    onEvent: (AssessmentScreenEvent) -> Unit = {}
+    onEvent: (AssessmentScreenEvent) -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -85,35 +84,35 @@ fun AssessmentScreenContent(
             CenterAlignedTopAppBar(
                 navigationIcon = {
                     IconButton(
-                        onClick = onBackClick
+                        onClick = onBackClick,
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                 },
                 title = {
                     Text(
                         text = "ASSESSMENT FORM",
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
                     )
-                }
+                },
             )
-        }
+        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             TibaTextField(
                 value = assessmentScreenState.patientName,
                 onValueChange = {},
                 label = "Patient's Name",
-                enabled = false
+                enabled = false,
             )
             TibaDatePicker(
                 value = assessmentScreenState.visitDate,
@@ -122,16 +121,16 @@ fun AssessmentScreenContent(
                 },
                 label = "Visit Date",
                 placeHolder = "Select Visit Date",
-                errorMessage = assessmentScreenState.visitDateError
+                errorMessage = assessmentScreenState.visitDateError,
             )
             Text(
                 text = "General Health",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
             Column {
                 listOf("Good", "Poor").forEach {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         RadioButton(
                             selected = assessmentScreenState.generalHealth == it,
@@ -142,7 +141,7 @@ fun AssessmentScreenContent(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = it,
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                     }
                 }
@@ -150,12 +149,12 @@ fun AssessmentScreenContent(
             if (isOverweight) {
                 Text(
                     text = "Are you currently taking any drugs?",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
                 Column {
                     listOf("Yes", "No").forEach {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             RadioButton(
                                 selected = assessmentScreenState.currentlyTakingDrugs == it,
@@ -166,7 +165,7 @@ fun AssessmentScreenContent(
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
                                 text = it,
-                                style = MaterialTheme.typography.bodyMedium
+                                style = MaterialTheme.typography.bodyMedium,
                             )
                         }
                     }
@@ -174,12 +173,12 @@ fun AssessmentScreenContent(
             } else {
                 Text(
                     text = "Have you ever been on a diet to lose weight?",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
                 Column {
                     listOf("Yes", "No").forEach {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             RadioButton(
                                 selected = assessmentScreenState.onDietToLoseWeight == it,
@@ -190,7 +189,7 @@ fun AssessmentScreenContent(
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
                                 text = it,
-                                style = MaterialTheme.typography.bodyMedium
+                                style = MaterialTheme.typography.bodyMedium,
                             )
                         }
                     }
@@ -203,20 +202,20 @@ fun AssessmentScreenContent(
                 },
                 label = "Comments",
                 minLines = 4,
-                errorMessage = assessmentScreenState.commentError
+                errorMessage = assessmentScreenState.commentError,
             )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
                 AnimatedContent(
-                    targetState = assessmentScreenState.isLoading
+                    targetState = assessmentScreenState.isLoading,
                 ) { isLoading ->
                     if (isLoading) {
                         CircularProgressIndicator(
-                            modifier = Modifier.size(48.dp)
+                            modifier = Modifier.size(48.dp),
                         )
                     } else {
                         TibaFilledButton(
@@ -226,7 +225,7 @@ fun AssessmentScreenContent(
                             onClick = {
                                 onEvent(AssessmentScreenEvent.OnSubmit)
                             },
-                            label = "SAVE"
+                            label = "SAVE",
                         )
                     }
                 }

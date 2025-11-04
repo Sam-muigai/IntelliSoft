@@ -4,14 +4,14 @@ import com.samkt.intellisoft.core.networking.IntellisoftApiService
 import com.samkt.intellisoft.core.networking.helpers.ApiResponse
 import com.samkt.intellisoft.core.preferences.AppPreferences
 import com.samkt.intellisoft.data.mappers.toData
-import com.samkt.intellisoft.domain.model.SignUp
-import com.samkt.intellisoft.domain.repositories.AuthRepository
 import com.samkt.intellisoft.domain.helpers.Result
 import com.samkt.intellisoft.domain.model.Login
+import com.samkt.intellisoft.domain.model.SignUp
+import com.samkt.intellisoft.domain.repositories.AuthRepository
 
 class AuthRepositoryImpl(
     private val intellisoftApiService: IntellisoftApiService,
-    private val appPreferences: AppPreferences
+    private val appPreferences: AppPreferences,
 ) : AuthRepository {
 
     override suspend fun signUp(signUp: SignUp): Result<String> {

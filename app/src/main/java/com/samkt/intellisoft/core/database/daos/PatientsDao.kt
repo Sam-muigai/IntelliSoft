@@ -20,5 +20,4 @@ interface PatientsDao {
 
     @Query("UPDATE patients SET isSynced = :isSynced WHERE id = :patientId")
     suspend fun updatePatientSyncStatus(patientId: Int, isSynced: Boolean)
-
 }

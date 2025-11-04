@@ -18,7 +18,7 @@ import java.time.LocalDate
 
 class VitalsScreenViewModel(
     savedStateHandle: SavedStateHandle,
-    private val patientRepository: PatientRepository
+    private val patientRepository: PatientRepository,
 ) : ViewModel() {
 
     private val _vitalsScreenState = MutableStateFlow(VitalsScreenState())
@@ -40,7 +40,6 @@ class VitalsScreenViewModel(
 
     private val _oneTimeEvents = Channel<OneTimeEvents>()
     val oneTimeEvents = _oneTimeEvents.receiveAsFlow()
-
 
     fun onEvent(event: VitalsScreenEvent) {
         when (event) {
@@ -104,7 +103,7 @@ class VitalsScreenViewModel(
                     patientId = patientId,
                     visitDate = LocalDate.parse(visitDate),
                 )
-               val vitalsId =  patientRepository.saveVitalsInformation(vitals)
+                val vitalsId = patientRepository.saveVitalsInformation(vitals)
                 _vitalsScreenState.update {
                     it.copy(vitalsId = vitalsId)
                 }
@@ -113,9 +112,9 @@ class VitalsScreenViewModel(
                         Screens.Assessment.createRoute(
                             bmi,
                             vitalsScreenState.value.patientId,
-                            vitalsId
-                        )
-                    )
+                            vitalsId,
+                        ),
+                    ),
                 )
             }
         }
@@ -129,7 +128,7 @@ class VitalsScreenViewModel(
             val bmi = weightInKg / (heightInMeters * heightInMeters)
             _vitalsScreenState.update {
                 it.copy(
-                    bmi = String.format("%.2f", bmi)
+                    bmi = String.format("%.2f", bmi),
                 )
             }
         } catch (e: Exception) {
@@ -148,7 +147,7 @@ data class VitalsScreenState(
     val weightError: String? = null,
     val bmi: String = "",
     val patientId: Int = 0,
-    val vitalsId: Int = 0
+    val vitalsId: Int = 0,
 )
 
 sealed interface VitalsScreenEvent {

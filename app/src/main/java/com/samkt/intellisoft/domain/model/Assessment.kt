@@ -2,7 +2,7 @@ package com.samkt.intellisoft.domain.model
 
 import java.time.LocalDate
 
-data class Assessment (
+data class Assessment(
     val id: Int,
     val generalHealth: String,
     val onDiet: String,
@@ -10,6 +10,6 @@ data class Assessment (
     val comments: String,
     val visitDate: LocalDate,
     val vitalId: Int,
-    val patientBackendId:String = "",
-    val vitalsBackendId: String = ""
+    val patientBackendId: String = "",
+    val vitalsBackendId: String = "",
 )

@@ -37,7 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 fun LoginScreen(
     loginScreenViewModel: LoginScreenViewModel = koinViewModel(),
     onSignUpClick: () -> Unit,
-    onSignInSuccess: (route: String) -> Unit = {}
+    onSignInSuccess: (route: String) -> Unit = {},
 ) {
     val loginScreenState = loginScreenViewModel.loginScreenState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
@@ -60,7 +60,7 @@ fun LoginScreen(
     LoginScreenContent(
         loginScreenState = loginScreenState,
         onEvent = loginScreenViewModel::onEvent,
-        onSignUpClick = onSignUpClick
+        onSignUpClick = onSignUpClick,
     )
 }
 
@@ -69,10 +69,10 @@ fun LoginScreenContent(
     modifier: Modifier = Modifier,
     loginScreenState: LoginScreenState,
     onEvent: (LoginScreenEvent) -> Unit,
-    onSignUpClick: () -> Unit = {}
+    onSignUpClick: () -> Unit = {},
 ) {
     Scaffold(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -80,7 +80,7 @@ fun LoginScreenContent(
                 .padding(innerPadding)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -89,14 +89,14 @@ fun LoginScreenContent(
                     painter = painterResource(R.drawable.logo),
                     contentDescription = "Logo",
                     modifier = Modifier.size(180.dp),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
                 )
                 Text(
                     text = "IntelliSoft",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.ExtraBold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                        color = MaterialTheme.colorScheme.primary,
+                    ),
                 )
             }
 
@@ -107,7 +107,7 @@ fun LoginScreenContent(
                 },
                 placeHolder = "example@gmail.com",
                 label = "Email",
-                errorMessage = loginScreenState.emailError
+                errorMessage = loginScreenState.emailError,
             )
             TibaPasswordTextField(
                 value = loginScreenState.password,
@@ -120,20 +120,20 @@ fun LoginScreenContent(
                 onIconButtonClicked = {
                     onEvent(LoginScreenEvent.OnPasswordVisibilityChange)
                 },
-                errorMessage = loginScreenState.passwordError
+                errorMessage = loginScreenState.passwordError,
             )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
                 AnimatedContent(
-                    targetState = loginScreenState.isLoading
+                    targetState = loginScreenState.isLoading,
                 ) { isLoading ->
                     if (isLoading) {
                         CircularProgressIndicator(
-                            modifier = Modifier.size(48.dp)
+                            modifier = Modifier.size(48.dp),
                         )
                     } else {
                         TibaFilledButton(
@@ -141,7 +141,7 @@ fun LoginScreenContent(
                             label = "LOGIN",
                             onClick = {
                                 onEvent(LoginScreenEvent.OnLoginButtonClick)
-                            }
+                            },
                         )
                     }
                 }
@@ -158,7 +158,7 @@ fun LoginScreenContent(
                     text = "Sign up",
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.clickable(onClick = onSignUpClick)
+                    modifier = Modifier.clickable(onClick = onSignUpClick),
                 )
             }
         }

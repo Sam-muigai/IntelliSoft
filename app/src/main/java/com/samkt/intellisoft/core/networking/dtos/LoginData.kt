@@ -1,6 +1,5 @@
 package com.samkt.intellisoft.core.networking.dtos
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -17,5 +16,5 @@ data class LoginData(
     @SerialName("name")
     val name: String,
     @SerialName("updated_at")
-    val updatedAt: String
+    val updatedAt: String,
 )

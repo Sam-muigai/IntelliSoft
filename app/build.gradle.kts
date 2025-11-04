@@ -25,7 +25,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -59,7 +59,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
     // ktor
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.client.content.negotiation)
@@ -84,8 +83,7 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
 
     // room
-  //  implementation(libs.androidx.room.ktx)
+    //  implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
 }
-

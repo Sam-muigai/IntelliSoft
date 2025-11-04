@@ -20,7 +20,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
-import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.utils.EmptyContent.contentType
@@ -31,7 +30,7 @@ import kotlinx.coroutines.flow.first
 
 class IntellisoftApiServiceImpl(
     private val client: HttpClient,
-    private val preferences: AppPreferences
+    private val preferences: AppPreferences,
 ) : IntellisoftApiService {
     override suspend fun signUp(signUpRequest: SignUpRequest): ApiResponse<SignUpResponse> {
         return safeApiCall {
@@ -89,7 +88,6 @@ class IntellisoftApiServiceImpl(
             }
         }
     }
-
 
     companion object {
         const val BASE_URL = "https://patientvisitapis.intellisoftkenya.com/api/"

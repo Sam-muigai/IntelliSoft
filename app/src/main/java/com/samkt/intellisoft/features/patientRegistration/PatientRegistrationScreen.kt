@@ -31,7 +31,7 @@ import org.koin.androidx.compose.koinViewModel
 fun PatientRegistrationScreen(
     patientRegistrationScreenViewModel: PatientRegistrationScreenViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
-    onNavigate: (route: String) -> Unit = {}
+    onNavigate: (route: String) -> Unit = {},
 ) {
     val addPatientScreenState =
         patientRegistrationScreenViewModel.addPatientScreenState.collectAsStateWithLifecycle().value
@@ -51,9 +51,8 @@ fun PatientRegistrationScreen(
     PatientRegistrationScreenContent(
         addPatientScreenState = addPatientScreenState,
         onEvent = patientRegistrationScreenViewModel::onEvent,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
     )
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,7 +61,7 @@ fun PatientRegistrationScreenContent(
     modifier: Modifier = Modifier,
     addPatientScreenState: AddPatientScreenState,
     onEvent: (AddPatientScreenEvent) -> Unit,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -70,29 +69,29 @@ fun PatientRegistrationScreenContent(
             CenterAlignedTopAppBar(
                 navigationIcon = {
                     IconButton(
-                        onClick = onBackClick
+                        onClick = onBackClick,
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                 },
                 title = {
                     Text(
                         text = "PATIENT REGISTRATION FORM",
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
                     )
-                }
+                },
             )
-        }
+        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             TibaTextField(
                 value = addPatientScreenState.patientNumber,
@@ -101,7 +100,7 @@ fun PatientRegistrationScreenContent(
                 },
                 label = "Patient's Number",
                 placeHolder = "Enter unique Patient Number",
-                errorMessage = addPatientScreenState.patientNumberError
+                errorMessage = addPatientScreenState.patientNumberError,
             )
 
             TibaDatePicker(
@@ -111,9 +110,8 @@ fun PatientRegistrationScreenContent(
                 },
                 label = "Registration Date",
                 errorMessage = addPatientScreenState.registrationDateError,
-                placeHolder = "Registration Date"
+                placeHolder = "Registration Date",
             )
-
 
             TibaTextField(
                 value = addPatientScreenState.firstName,
@@ -122,7 +120,7 @@ fun PatientRegistrationScreenContent(
                 },
                 label = "First Name",
                 placeHolder = "Enter Patient's First Name",
-                errorMessage = addPatientScreenState.firstNameError
+                errorMessage = addPatientScreenState.firstNameError,
             )
 
             TibaTextField(
@@ -132,7 +130,7 @@ fun PatientRegistrationScreenContent(
                 },
                 label = "Last Name",
                 placeHolder = "Enter Patient's Last Name",
-                errorMessage = addPatientScreenState.lastNameError
+                errorMessage = addPatientScreenState.lastNameError,
             )
 
             TibaDatePicker(
@@ -142,7 +140,7 @@ fun PatientRegistrationScreenContent(
                 },
                 label = "Date of Birth",
                 errorMessage = addPatientScreenState.dobError,
-                placeHolder = "Select Patient's Date of Birth"
+                placeHolder = "Select Patient's Date of Birth",
             )
 
             TibaDropDown(
@@ -153,7 +151,7 @@ fun PatientRegistrationScreenContent(
                 },
                 label = "Gender",
                 placeHolder = "Select Patient's Gender",
-                errorMessage = addPatientScreenState.genderError
+                errorMessage = addPatientScreenState.genderError,
             )
 
             TibaFilledButton(
@@ -163,7 +161,7 @@ fun PatientRegistrationScreenContent(
                 label = "SAVE",
                 onClick = {
                     onEvent(AddPatientScreenEvent.OnSavePatientClicked)
-                }
+                },
             )
         }
     }

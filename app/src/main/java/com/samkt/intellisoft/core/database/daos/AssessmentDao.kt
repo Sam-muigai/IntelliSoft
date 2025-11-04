@@ -20,7 +20,7 @@ interface AssessmentDao {
     suspend fun setBackendIdsForAssessment(
         assessmentId: Int,
         patientBackendId: String,
-        vitalBackendId: String
+        vitalBackendId: String,
     ): Int
 
     @Query("UPDATE assessments SET isSynced = :isSynced WHERE id = :assessmentId")

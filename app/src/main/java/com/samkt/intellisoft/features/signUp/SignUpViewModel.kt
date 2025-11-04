@@ -8,7 +8,6 @@ import com.samkt.intellisoft.domain.repositories.AuthRepository
 import com.samkt.intellisoft.features.navigation.Screens
 import com.samkt.intellisoft.utils.OneTimeEvents
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -16,7 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SignUpViewModel(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _signUpScreenState = MutableStateFlow(SignUpScreenState())
@@ -25,13 +24,12 @@ class SignUpViewModel(
     private val _oneTimeEvents = Channel<OneTimeEvents>()
     val oneTimeEvents = _oneTimeEvents.receiveAsFlow()
 
-
     fun onEvent(event: SignUpScreenEvent) {
         when (event) {
             is SignUpScreenEvent.OnConfirmPasswordChange -> {
                 _signUpScreenState.update {
                     it.copy(
-                        confirmPassword = event.confirmPassword
+                        confirmPassword = event.confirmPassword,
                     )
                 }
             }
@@ -39,7 +37,7 @@ class SignUpViewModel(
             SignUpScreenEvent.OnConfirmPasswordVisibilityChange -> {
                 _signUpScreenState.update {
                     it.copy(
-                        confirmPasswordVisible = !signUpScreenState.value.confirmPasswordVisible
+                        confirmPasswordVisible = !signUpScreenState.value.confirmPasswordVisible,
                     )
                 }
             }
@@ -47,7 +45,7 @@ class SignUpViewModel(
             is SignUpScreenEvent.OnEmailChange -> {
                 _signUpScreenState.update {
                     it.copy(
-                        email = event.email
+                        email = event.email,
                     )
                 }
             }
@@ -55,7 +53,7 @@ class SignUpViewModel(
             is SignUpScreenEvent.OnFirstNameChange -> {
                 _signUpScreenState.update {
                     it.copy(
-                        firstName = event.firstName
+                        firstName = event.firstName,
                     )
                 }
             }
@@ -63,7 +61,7 @@ class SignUpViewModel(
             is SignUpScreenEvent.OnLastNameChange -> {
                 _signUpScreenState.update {
                     it.copy(
-                        lastName = event.lastName
+                        lastName = event.lastName,
                     )
                 }
             }
@@ -71,7 +69,7 @@ class SignUpViewModel(
             is SignUpScreenEvent.OnPasswordChange -> {
                 _signUpScreenState.update {
                     it.copy(
-                        password = event.password
+                        password = event.password,
                     )
                 }
             }
@@ -79,7 +77,7 @@ class SignUpViewModel(
             SignUpScreenEvent.OnPasswordVisibilityChange -> {
                 _signUpScreenState.update {
                     it.copy(
-                        passwordVisible = !signUpScreenState.value.passwordVisible
+                        passwordVisible = !signUpScreenState.value.passwordVisible,
                     )
                 }
             }
@@ -97,7 +95,7 @@ class SignUpViewModel(
                 email.isEmpty() -> {
                     _signUpScreenState.update {
                         it.copy(
-                            emailError = "Please provide an email"
+                            emailError = "Please provide an email",
                         )
                     }
                     return@apply
@@ -113,7 +111,7 @@ class SignUpViewModel(
                 firstName.isEmpty() -> {
                     _signUpScreenState.update {
                         it.copy(
-                            firstNameError = "Please provide a first name"
+                            firstNameError = "Please provide a first name",
                         )
                     }
                     return@apply
@@ -122,7 +120,7 @@ class SignUpViewModel(
                 lastName.isEmpty() -> {
                     _signUpScreenState.update {
                         it.copy(
-                            lastNameError = "Please provide a last name"
+                            lastNameError = "Please provide a last name",
                         )
                     }
                     return@apply
@@ -131,7 +129,7 @@ class SignUpViewModel(
                 password.isEmpty() -> {
                     _signUpScreenState.update {
                         it.copy(
-                            passwordError = "Please provide a password"
+                            passwordError = "Please provide a password",
                         )
                     }
                     return@apply
@@ -140,7 +138,7 @@ class SignUpViewModel(
                 password.length < 8 -> {
                     _signUpScreenState.update {
                         it.copy(
-                            passwordError = "Password must be at least 8 characters"
+                            passwordError = "Password must be at least 8 characters",
                         )
                     }
                     return@apply
@@ -149,7 +147,7 @@ class SignUpViewModel(
                 confirmPassword.isEmpty() -> {
                     _signUpScreenState.update {
                         it.copy(
-                            confirmPasswordError = "Please provide a confirm password"
+                            confirmPasswordError = "Please provide a confirm password",
                         )
                     }
                     return@apply
@@ -158,7 +156,7 @@ class SignUpViewModel(
                 password != confirmPassword -> {
                     _signUpScreenState.update {
                         it.copy(
-                            confirmPasswordError = "Passwords do not match"
+                            confirmPasswordError = "Passwords do not match",
                         )
                     }
                     return@apply
@@ -169,18 +167,18 @@ class SignUpViewModel(
                     email = email,
                     firstname = firstName,
                     lastname = lastName,
-                    password = password
+                    password = password,
                 )
                 _signUpScreenState.update {
                     it.copy(
-                        isLoading = true
+                        isLoading = true,
                     )
                 }
                 when (val result = authRepository.signUp(signUp)) {
                     is Result.Error -> {
                         _signUpScreenState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                         _oneTimeEvents.send(OneTimeEvents.ShowMessage(result.message))
@@ -189,7 +187,7 @@ class SignUpViewModel(
                     is Result.Success -> {
                         _signUpScreenState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                         _oneTimeEvents.send(OneTimeEvents.Navigate(Screens.Login.route))
@@ -206,12 +204,11 @@ class SignUpViewModel(
                 firstNameError = null,
                 lastNameError = null,
                 passwordError = null,
-                confirmPasswordError = null
+                confirmPasswordError = null,
             )
         }
     }
 }
-
 
 data class SignUpScreenState(
     val email: String = "",

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -19,7 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -38,14 +36,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.samkt.intellisoft.core.ui.components.TibaDatePicker
 import com.samkt.intellisoft.core.ui.components.TibaFilledButton
 import com.samkt.intellisoft.domain.model.User
-import com.samkt.intellisoft.features.patientRegistration.AddPatientScreenEvent
-import com.samkt.intellisoft.utils.getTodaysDate
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
     homeScreenViewModel: HomeScreenViewModel = koinViewModel(),
-    onAddPatientClick: () -> Unit = {}
+    onAddPatientClick: () -> Unit = {},
 ) {
     val user = homeScreenViewModel.user.collectAsStateWithLifecycle().value
     val date = homeScreenViewModel.date
@@ -54,7 +50,7 @@ fun HomeScreen(
 
     LaunchedEffect(true) {
         homeScreenViewModel.getPatients(
-            date
+            date,
         )
     }
 
@@ -63,7 +59,7 @@ fun HomeScreen(
         onAddPatientClick = onAddPatientClick,
         onDateChange = homeScreenViewModel::onDateChange,
         date = date,
-        homeScreenUiState = homeScreenUiState
+        homeScreenUiState = homeScreenUiState,
     )
 }
 
@@ -75,7 +71,7 @@ fun HomeScreenContent(
     onAddPatientClick: () -> Unit = {},
     onDateChange: (String) -> Unit = {},
     date: String = "",
-    homeScreenUiState: HomeScreenUiState
+    homeScreenUiState: HomeScreenUiState,
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -83,33 +79,33 @@ fun HomeScreenContent(
             TopAppBar(
                 title = {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Box(
                             modifier = Modifier
                                 .size(48.dp)
                                 .clip(CircleShape)
                                 .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             Text(
                                 text = getInitials(user.fullName),
                                 style = MaterialTheme.typography.titleLarge.copy(
-                                    color = MaterialTheme.colorScheme.primary
-                                )
+                                    color = MaterialTheme.colorScheme.primary,
+                                ),
                             )
                         }
                         Spacer(Modifier.width(8.dp))
                         Column {
                             Text(
                                 text = user.fullName,
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.titleMedium,
                             )
                             Text(
                                 text = user.email,
                                 style = MaterialTheme.typography.bodySmall.copy(
-                                    fontWeight = FontWeight.SemiBold
-                                )
+                                    fontWeight = FontWeight.SemiBold,
+                                ),
                             )
                         }
                     }
@@ -119,39 +115,39 @@ fun HomeScreenContent(
         floatingActionButton = {
             TibaFilledButton(
                 onClick = onAddPatientClick,
-                label = "+ ADD NEW PATIENT"
+                label = "+ ADD NEW PATIENT",
             )
-        }
+        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(
                 "Patient's listing",
                 style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 ),
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline,
             )
             TibaDatePicker(
                 value = date,
                 onValueChange = onDateChange,
                 label = "Registration Date",
-                placeHolder = "Choose a date"
+                placeHolder = "Choose a date",
             )
             AnimatedContent(
                 modifier = Modifier.padding(top = 8.dp),
-                targetState = homeScreenUiState
+                targetState = homeScreenUiState,
             ) { state ->
                 when (state) {
                     is HomeScreenUiState.Error -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             Text(state.message)
                         }
@@ -160,7 +156,7 @@ fun HomeScreenContent(
                     HomeScreenUiState.Loading -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             CircularProgressIndicator()
                         }
@@ -169,7 +165,7 @@ fun HomeScreenContent(
                     is HomeScreenUiState.Success -> {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             if (state.visits.isNotEmpty()) {
                                 item {
@@ -184,21 +180,21 @@ fun HomeScreenContent(
                                             color = MaterialTheme.colorScheme.onPrimary,
                                             modifier = Modifier.weight(1f),
                                             style = MaterialTheme.typography.titleMedium,
-                                            textAlign = TextAlign.Center
+                                            textAlign = TextAlign.Center,
                                         )
                                         Text(
                                             text = "Age",
                                             color = MaterialTheme.colorScheme.onPrimary,
                                             modifier = Modifier.weight(1f),
                                             style = MaterialTheme.typography.titleMedium,
-                                            textAlign = TextAlign.Center
+                                            textAlign = TextAlign.Center,
                                         )
                                         Text(
                                             text = "BMI Status",
                                             color = MaterialTheme.colorScheme.onPrimary,
                                             modifier = Modifier.weight(1f),
                                             style = MaterialTheme.typography.titleMedium,
-                                            textAlign = TextAlign.Center
+                                            textAlign = TextAlign.Center,
                                         )
                                     }
                                 }
@@ -208,7 +204,7 @@ fun HomeScreenContent(
                                         text = "No visits available",
                                         modifier = Modifier.fillMaxWidth(),
                                         style = MaterialTheme.typography.titleMedium,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
                                     )
                                 }
                             }
@@ -229,13 +225,13 @@ fun HomeScreenContent(
                                             text = visit.age.toString(),
                                             modifier = Modifier.weight(1f),
                                             style = MaterialTheme.typography.bodyMedium,
-                                            textAlign = TextAlign.Center
+                                            textAlign = TextAlign.Center,
                                         )
                                         Text(
                                             text = visit.bmiStatus,
                                             modifier = Modifier.weight(1f),
                                             style = MaterialTheme.typography.bodyMedium,
-                                            textAlign = TextAlign.Center
+                                            textAlign = TextAlign.Center,
                                         )
                                     }
                                     HorizontalDivider()

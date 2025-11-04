@@ -30,7 +30,7 @@ import org.koin.androidx.compose.koinViewModel
 fun VitalsScreen(
     vitalsScreenViewModel: VitalsScreenViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
-    onNavigate: (route: String) -> Unit = {}
+    onNavigate: (route: String) -> Unit = {},
 ) {
     val vitalsScreenState =
         vitalsScreenViewModel.vitalsScreenState.collectAsStateWithLifecycle().value
@@ -50,7 +50,7 @@ fun VitalsScreen(
     VitalsScreenContent(
         onBackClick = onBackClick,
         vitalsScreenState = vitalsScreenState,
-        onEvent = vitalsScreenViewModel::onEvent
+        onEvent = vitalsScreenViewModel::onEvent,
     )
 }
 
@@ -60,7 +60,7 @@ fun VitalsScreenContent(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     vitalsScreenState: VitalsScreenState,
-    onEvent: (VitalsScreenEvent) -> Unit
+    onEvent: (VitalsScreenEvent) -> Unit,
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -68,35 +68,35 @@ fun VitalsScreenContent(
             CenterAlignedTopAppBar(
                 navigationIcon = {
                     IconButton(
-                        onClick = onBackClick
+                        onClick = onBackClick,
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                 },
                 title = {
                     Text(
                         text = "PATIENT VITALS FORM",
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
                     )
-                }
+                },
             )
-        }
+        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             TibaTextField(
                 value = vitalsScreenState.patientName,
                 onValueChange = {},
                 label = "Patient's Name",
-                enabled = false
+                enabled = false,
             )
 
             TibaDatePicker(
@@ -106,7 +106,7 @@ fun VitalsScreenContent(
                 },
                 label = "Visit Date",
                 placeHolder = "Select Visit Date",
-                errorMessage = vitalsScreenState.visitDateError
+                errorMessage = vitalsScreenState.visitDateError,
             )
 
             TibaTextField(
@@ -116,7 +116,7 @@ fun VitalsScreenContent(
                 },
                 label = "Height(In CM)",
                 placeHolder = "Enter Height in centimeters",
-                errorMessage = vitalsScreenState.heightError
+                errorMessage = vitalsScreenState.heightError,
             )
             TibaTextField(
                 value = vitalsScreenState.weight,
@@ -125,20 +125,20 @@ fun VitalsScreenContent(
                 },
                 label = "Weight(In KG)",
                 placeHolder = "Enter Weight in kilograms",
-                errorMessage = vitalsScreenState.weightError
+                errorMessage = vitalsScreenState.weightError,
             )
             TibaTextField(
                 value = vitalsScreenState.bmi,
                 onValueChange = {},
                 label = "BMI",
-                enabled = false
+                enabled = false,
             )
             TibaFilledButton(
                 modifier = Modifier.fillMaxWidth(),
                 label = "SAVE",
                 onClick = {
                     onEvent(VitalsScreenEvent.OnSaveVitals)
-                }
+                },
             )
         }
     }

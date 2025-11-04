@@ -9,7 +9,7 @@ data class VitalsWithAssessments(
 
     @Relation(
         parentColumn = "id",
-        entityColumn = "vitalId"
+        entityColumn = "vitalId",
     )
-    val assessments: List<AssessmentEntity>
+    val assessments: List<AssessmentEntity>,
 )

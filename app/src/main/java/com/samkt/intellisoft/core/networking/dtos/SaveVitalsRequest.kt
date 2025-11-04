@@ -1,6 +1,5 @@
 package com.samkt.intellisoft.core.networking.dtos
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,5 +14,5 @@ data class SaveVitalsRequest(
     @SerialName("visit_date")
     val visitDate: String,
     @SerialName("weight")
-    val weight: String
+    val weight: String,
 )

@@ -11,5 +11,5 @@ import org.koin.dsl.module
 val dataModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
     single<UserRepository> { UserRepositoryImpl(get()) }
-    single<PatientRepository> { PatientRepositoryImpl(get(),get()) }
+    single<PatientRepository> { PatientRepositoryImpl(get(), get()) }
 }
