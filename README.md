@@ -22,6 +22,12 @@
     <td><img src="screenshots/vitals.jpg" width="250" alt="Vitals"></td>
     <td><img src="screenshots/assessment.jpg" width="250" alt="General Assessment"></td>
   </tr>
+  <tr>
+    <th>Overweight Assessment</th>
+  </tr>
+  <tr>
+    <td><img src="screenshots/overweight_assessment.jpg" width="250" alt="Overweight Assessment"></td>
+  </tr>
 </table>
 
 
