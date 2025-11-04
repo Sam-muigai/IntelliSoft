@@ -112,7 +112,8 @@ class VitalsScreenViewModel(
                     OneTimeEvents.Navigate(
                         Screens.Assessment.createRoute(
                             bmi,
-                            vitalsScreenState.value.patientId
+                            vitalsScreenState.value.patientId,
+                            vitalsId
                         )
                     )
                 )

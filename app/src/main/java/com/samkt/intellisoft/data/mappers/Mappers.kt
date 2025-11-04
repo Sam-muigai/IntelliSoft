@@ -1,9 +1,11 @@
 package com.samkt.intellisoft.data.mappers
 
+import com.samkt.intellisoft.core.database.entities.AssessmentEntity
 import com.samkt.intellisoft.core.database.entities.PatientEntity
 import com.samkt.intellisoft.core.database.entities.VitalsEntity
 import com.samkt.intellisoft.core.networking.dtos.LoginRequest
 import com.samkt.intellisoft.core.networking.dtos.SignUpRequest
+import com.samkt.intellisoft.domain.model.Assessment
 import com.samkt.intellisoft.domain.model.Login
 import com.samkt.intellisoft.domain.model.Patient
 import com.samkt.intellisoft.domain.model.SignUp
@@ -58,5 +60,17 @@ fun Vitals.toEntity(): VitalsEntity {
         weight = weight,
         visitDate = visitDate,
         patientId = patientId
+    )
+}
+
+fun Assessment.toEntity(): AssessmentEntity {
+    return AssessmentEntity(
+        id = id,
+        generalHealth = generalHealth,
+        onDiet = onDiet,
+        onDrugs = onDrugs,
+        comments = comments,
+        visitDate = visitDate,
+        vitalId = vitalId,
     )
 }

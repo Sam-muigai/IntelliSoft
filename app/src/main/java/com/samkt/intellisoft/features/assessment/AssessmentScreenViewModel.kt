@@ -1,17 +1,44 @@
 package com.samkt.intellisoft.features.assessment
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.samkt.intellisoft.domain.model.Assessment
+import com.samkt.intellisoft.domain.repositories.PatientRepository
+import com.samkt.intellisoft.features.navigation.NavArguments
 import com.samkt.intellisoft.utils.OneTimeEvents
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 
-class AssessmentScreenViewModel : ViewModel() {
+class AssessmentScreenViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val patientRepository: PatientRepository
+) : ViewModel() {
 
     private val _assessmentScreenState = MutableStateFlow(AssessmentScreenState())
     val assessmentScreenState = _assessmentScreenState.asStateFlow()
+
+    init {
+        val patientId = savedStateHandle.get<Int>(NavArguments.PATIENT_ID) ?: 0
+        val vitalsId = savedStateHandle.get<Int>(NavArguments.VITALS_ID) ?: 0
+        viewModelScope.launch {
+            patientRepository.getPatient(patientId).collect { patient ->
+                _assessmentScreenState.update {
+                    it.copy(
+                        patientName = "${patient?.firstName} ${patient?.lastName}",
+                        patientId = patientId,
+                        vitalsId = vitalsId
+                    )
+                }
+            }
+        }
+    }
+
 
     private val _oneTimeEvents = Channel<OneTimeEvents>()
     val oneTimeEvents = _oneTimeEvents.receiveAsFlow()
@@ -66,10 +93,21 @@ class AssessmentScreenViewModel : ViewModel() {
                     return@apply
                 }
             }
-            _oneTimeEvents.trySend(OneTimeEvents.PopBackStack)
+            viewModelScope.launch {
+                val assessment = Assessment(
+                    id = assessmentId,
+                    generalHealth = generalHealth,
+                    onDiet = onDietToLoseWeight,
+                    onDrugs = currentlyTakingDrugs,
+                    comments = comment,
+                    visitDate = LocalDate.parse(visitDate),
+                    vitalId = vitalsId,
+                )
+                patientRepository.saveAssessment(assessment)
+                _oneTimeEvents.send(OneTimeEvents.PopBackStack)
+            }
         }
     }
-
 }
 
 
@@ -82,7 +120,10 @@ data class AssessmentScreenState(
     val onDietToLoseWeight: String = "Yes",
     val currentlyTakingDrugs: String = "Yes",
     val comment: String = "",
-    val isOverweight: Boolean = false
+    val isOverweight: Boolean = false,
+    val patientId: Int = 0,
+    val vitalsId: Int = 0,
+    val assessmentId: Int = 0
 )
 
 sealed interface AssessmentScreenEvent {

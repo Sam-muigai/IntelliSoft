@@ -111,6 +111,11 @@ fun App() {
                         name = NavArguments.PATIENT_ID
                     ) {
                         type = NavType.IntType
+                    },
+                    navArgument(
+                        name = NavArguments.VITALS_ID
+                    ) {
+                        type = NavType.IntType
                     }
                 )
             ) {

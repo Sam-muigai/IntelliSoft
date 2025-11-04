@@ -15,9 +15,9 @@ sealed class Screens(val route: String) {
     }
 
     data object Assessment :
-        Screens("assessment/{${NavArguments.BMI}}/{${NavArguments.PATIENT_ID}}") {
-        fun createRoute(bmi: String, patientId: Int): String {
-            return "assessment/$bmi/$patientId"
+        Screens("assessment/{${NavArguments.BMI}}/{${NavArguments.PATIENT_ID}}/{${NavArguments.VITALS_ID}}") {
+        fun createRoute(bmi: String, patientId: Int, vitalsId: Int): String {
+            return "assessment/$bmi/$patientId/$vitalsId"
         }
     }
 }
@@ -25,4 +25,5 @@ sealed class Screens(val route: String) {
 object NavArguments {
     const val BMI = "bmi"
     const val PATIENT_ID = "patient_id"
+    const val VITALS_ID = "vitals_id"
 }

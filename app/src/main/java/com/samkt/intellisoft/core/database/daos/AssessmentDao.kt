@@ -14,7 +14,7 @@ interface AssessmentDao {
     fun getAssessmentsByVitalId(vitalId: Int): Flow<List<AssessmentEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAssessment(assessment: AssessmentEntity)
+    suspend fun insertAssessment(assessment: AssessmentEntity): Long
 
     @Query("UPDATE assessments SET patientBackendId = :patientBackendId AND vitalBackendId = :vitalBackendId WHERE id = :assessmentId")
     suspend fun setBackendIdsForAssessment(
