@@ -3,13 +3,17 @@ package com.samkt.intellisoft.data.mappers
 import com.samkt.intellisoft.core.database.entities.AssessmentEntity
 import com.samkt.intellisoft.core.database.entities.PatientEntity
 import com.samkt.intellisoft.core.database.entities.VitalsEntity
+import com.samkt.intellisoft.core.networking.dtos.AddPatientRequest
 import com.samkt.intellisoft.core.networking.dtos.LoginRequest
+import com.samkt.intellisoft.core.networking.dtos.SaveVitalsRequest
 import com.samkt.intellisoft.core.networking.dtos.SignUpRequest
 import com.samkt.intellisoft.domain.model.Assessment
 import com.samkt.intellisoft.domain.model.Login
 import com.samkt.intellisoft.domain.model.Patient
 import com.samkt.intellisoft.domain.model.SignUp
 import com.samkt.intellisoft.domain.model.Vitals
+import com.samkt.intellisoft.utils.formatDate
+import kotlinx.coroutines.flow.update
 
 
 fun SignUp.toData(): SignUpRequest {
@@ -40,6 +44,17 @@ fun Patient.toEntity(): PatientEntity {
     )
 }
 
+fun Patient.toData(): AddPatientRequest {
+    return AddPatientRequest(
+        dob = dateOfBirth.formatDate(),
+        firstname = firstName,
+        gender = gender,
+        lastname = lastName,
+        regDate = registrationDate.formatDate(),
+        unique = patientNumber
+    )
+}
+
 
 fun PatientEntity.toDomain(): Patient {
     return Patient(
@@ -63,6 +78,28 @@ fun Vitals.toEntity(): VitalsEntity {
     )
 }
 
+
+fun VitalsEntity.toDomain(): Vitals {
+    return Vitals(
+        id = id,
+        height = height,
+        weight = weight,
+        visitDate = visitDate,
+        patientId = patientId,
+        patientBackendId = patientBackendId
+    )
+}
+
+fun Vitals.toData(): SaveVitalsRequest {
+    return SaveVitalsRequest(
+        bmi = calculateBmi(height, weight),
+        height = height,
+        patientId = patientBackendId,
+        visitDate = visitDate.formatDate(),
+        weight = weight
+    )
+}
+
 fun Assessment.toEntity(): AssessmentEntity {
     return AssessmentEntity(
         id = id,
@@ -73,4 +110,20 @@ fun Assessment.toEntity(): AssessmentEntity {
         visitDate = visitDate,
         vitalId = vitalId,
     )
+}
+
+private fun calculateBmi(
+    height: String,
+    weight: String
+): String {
+    val heightInCm = height.toDoubleOrNull() ?: 0.0
+    val weightInKg = weight.toDoubleOrNull() ?: 0.0
+    val heightInMeters = heightInCm / 100
+    return try {
+        val bmi = weightInKg / (heightInMeters * heightInMeters)
+        String.format("%.2f", bmi)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        "0.0"
+    }
 }

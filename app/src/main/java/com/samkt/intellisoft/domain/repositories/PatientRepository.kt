@@ -16,4 +16,6 @@ interface PatientRepository {
     fun getPatientByPatientNumber(patientNumber: String): Flow<Patient?>
 
     suspend fun saveAssessment(assessment: Assessment): Int
+
+    suspend fun syncPatientData(patientId: Int): Result<String>
 }

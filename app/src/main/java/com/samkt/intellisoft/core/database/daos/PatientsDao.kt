@@ -17,4 +17,8 @@ interface PatientsDao {
 
     @Query("SELECT * FROM patients WHERE patientNumber = :patientNumber")
     fun getPatientByPatientNumber(patientNumber: String): Flow<PatientEntity?>
+
+    @Query("UPDATE patients SET isSynced = :isSynced WHERE id = :patientId")
+    suspend fun updatePatientSyncStatus(patientId: Int, isSynced: Boolean)
+
 }

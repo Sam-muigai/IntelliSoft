@@ -16,5 +16,8 @@ interface VitalsDao {
     fun getVitals(patientId: Int): Flow<List<VitalsEntity>>
 
     @Query("UPDATE vitals SET patientBackendId = :patientBackendId WHERE patientId = :patientId")
-    fun setPatientBackendId(patientId: Int, patientBackendId: String)
+    suspend fun setPatientBackendId(patientId: Int, patientBackendId: String)
+
+    @Query("UPDATE vitals SET isSynced = :isSynced WHERE id = :vitalsId")
+    suspend fun updateSyncStatus(vitalsId: Int, isSynced: Boolean)
 }

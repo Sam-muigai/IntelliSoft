@@ -14,7 +14,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 
 interface AppPreferences {
     suspend fun saveAccessToken(token: String)
-    fun getUserToken(): Flow<String>
+    fun getAccessToken(): Flow<String>
 
     suspend fun saveFullName(fullName: String)
     fun getFullName(): Flow<String>
@@ -33,7 +33,7 @@ class AppPreferencesImpl(
         }
     }
 
-    override fun getUserToken(): Flow<String> {
+    override fun getAccessToken(): Flow<String> {
         return context.dataStore.data.map {
             it[USER_TOKEN] ?: ""
         }

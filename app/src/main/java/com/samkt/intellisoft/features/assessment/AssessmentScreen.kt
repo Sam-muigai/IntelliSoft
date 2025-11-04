@@ -1,5 +1,7 @@
 package com.samkt.intellisoft.features.assessment
 
+import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,10 +9,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,11 +26,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.samkt.intellisoft.core.ui.components.TibaDatePicker
 import com.samkt.intellisoft.core.ui.components.TibaFilledButton
 import com.samkt.intellisoft.core.ui.components.TibaTextField
+import com.samkt.intellisoft.features.login.LoginScreenEvent
 import com.samkt.intellisoft.utils.OneTimeEvents
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -40,11 +46,16 @@ fun AssessmentScreen(
 ) {
     val assessmentScreenState =
         assessmentScreenViewModel.assessmentScreenState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         assessmentScreenViewModel.oneTimeEvents.collectLatest { event ->
             when (event) {
                 OneTimeEvents.PopBackStack -> {
                     onSaveSuccess()
+                }
+
+                is OneTimeEvents.ShowMessage -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
 
                 else -> Unit
@@ -193,15 +204,32 @@ fun AssessmentScreenContent(
                 label = "Comments",
                 minLines = 4
             )
-            TibaFilledButton(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-                onClick = {
-                    onEvent(AssessmentScreenEvent.OnSubmit)
-                },
-                label = "SAVE"
-            )
+                horizontalArrangement = Arrangement.Center
+            ) {
+                AnimatedContent(
+                    targetState = assessmentScreenState.isLoading
+                ) { isLoading ->
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(48.dp)
+                        )
+                    } else {
+                        TibaFilledButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
+                            onClick = {
+                                onEvent(AssessmentScreenEvent.OnSubmit)
+                            },
+                            label = "SAVE"
+                        )
+                    }
+                }
+            }
         }
     }
 }

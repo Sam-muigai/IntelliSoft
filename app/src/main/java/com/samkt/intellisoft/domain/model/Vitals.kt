@@ -7,5 +7,6 @@ data class Vitals(
     val height: String,
     val weight: String,
     val patientId: Int,
-    val visitDate: LocalDate
+    val visitDate: LocalDate,
+    val patientBackendId: String = ""
 )

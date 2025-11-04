@@ -1,17 +1,30 @@
 package com.samkt.intellisoft.data.repositories
 
+import android.util.Log
 import com.samkt.intellisoft.core.database.IntellisoftDatabase
+import com.samkt.intellisoft.core.database.entities.VitalsEntity
+import com.samkt.intellisoft.core.networking.IntellisoftApiService
+import com.samkt.intellisoft.core.networking.dtos.PatientData
+import com.samkt.intellisoft.core.networking.dtos.SaveVitalsRequest
+import com.samkt.intellisoft.data.mappers.toData
 import com.samkt.intellisoft.data.mappers.toDomain
 import com.samkt.intellisoft.data.mappers.toEntity
 import com.samkt.intellisoft.domain.model.Assessment
 import com.samkt.intellisoft.domain.model.Patient
 import com.samkt.intellisoft.domain.model.Vitals
 import com.samkt.intellisoft.domain.repositories.PatientRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class PatientRepositoryImpl(
-    db: IntellisoftDatabase
+    db: IntellisoftDatabase,
+    private val intellisoftApiService: IntellisoftApiService
 ) : PatientRepository {
     private val patientDao = db.patientDao()
     private val vitalsDao = db.vitalsDao()
@@ -37,4 +50,53 @@ class PatientRepositoryImpl(
         return vitalsDao.saveVitals(vitals.toEntity()).toInt()
     }
 
+    override suspend fun syncPatientData(patientId: Int): Result<String> {
+        val patientEntity = patientDao.getPatientById(patientId).first()
+        if (patientEntity == null) {
+            Log.w("Sync", "No patient found with ID: $patientId")
+            return Result.failure(Exception("No patient found with ID: $patientId"))
+        }
+        val patient = patientEntity.toDomain()
+
+        return runCatching {
+            intellisoftApiService.savePatient(patient.toData())
+            patientDao.updatePatientSyncStatus(patientId, true)
+            val patients = getPatients()
+            val patientData = patients.find { it.unique == patient.patientNumber }
+            patientData?.let {
+                updateVitalsBackedId(patientId, it.id.toString())
+            }
+            val vitals = vitalsDao.getVitals(patientId).first()
+            syncVitals(vitals)
+            "Patient data synced successfully"
+        }
+    }
+
+    private suspend fun syncVitals(vitals: List<VitalsEntity>) {
+        coroutineScope {
+            val vitalTasks = vitals.map { vitalsEntity ->
+                async { saveVitalToBackend(vitalsEntity) }
+            }
+            vitalTasks.awaitAll()
+        }
+    }
+
+    private suspend fun saveVitalToBackend(vitalsEntity: VitalsEntity) {
+        runCatching {
+            intellisoftApiService.setVitals(vitalsEntity.toDomain().toData())
+        }.onSuccess {
+            vitalsDao.updateSyncStatus(vitalsEntity.id, true)
+        }
+    }
+
+    private suspend fun updateVitalsBackedId(patientId: Int, backendId: String) {
+        vitalsDao.setPatientBackendId(
+            patientId = patientId,
+            patientBackendId = backendId
+        )
+    }
+
+    private suspend fun getPatients(): List<PatientData> {
+        return intellisoftApiService.getPatients().data
+    }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.samkt.intellisoft.domain.model.User
 import com.samkt.intellisoft.domain.repositories.UserRepository
+import com.samkt.intellisoft.utils.getTodaysDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -52,6 +53,3 @@ fun getInitials(name: String): String {
     }
 }
 
-fun getTodaysDate(): String {
-    return DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now())
-}

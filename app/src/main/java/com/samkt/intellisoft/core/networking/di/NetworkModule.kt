@@ -8,5 +8,5 @@ import org.koin.dsl.module
 
 val networkModule = module {
     single<HttpClient> { getKtorClient() }
-    single<IntellisoftApiService> { IntellisoftApiServiceImpl(get()) }
+    single<IntellisoftApiService> { IntellisoftApiServiceImpl(get(),get()) }
 }
