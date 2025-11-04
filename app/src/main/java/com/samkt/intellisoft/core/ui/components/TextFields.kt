@@ -52,7 +52,8 @@ fun TibaTextField(
     placeHolder: String = "",
     label: String? = null,
     errorMessage: String? = null,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    minLines:Int = 1,
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -79,7 +80,8 @@ fun TibaTextField(
                 )
             },
             enabled = enabled,
-            readOnly = !enabled
+            readOnly = !enabled,
+            minLines = minLines
         )
         AnimatedVisibility(
             errorMessage != null

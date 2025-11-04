@@ -57,51 +57,67 @@ fun App() {
         ) {
             HomeScreen(
                 onAddPatientClick = {
-                    navHostController.navigate(Screens.AddNewPatient.route)
+                    navHostController.navigate(Screens.AddNewPatientInfo.route)
                 }
             )
         }
 
-        composable(
-            route = Screens.AddNewPatient.route
-        ) {
-            PatientRegistrationScreen(
-                onBackClick = {
-                    navHostController.popBackStack()
-                },
-                onNavigate = { route ->
-                    navHostController.navigate(route)
-                }
-            )
-        }
+        navigation(
+            startDestination = Screens.AddNewPatient.route,
+            route = Screens.AddNewPatientInfo.route
+        ){
+            composable(
+                route = Screens.AddNewPatient.route
+            ) {
+                PatientRegistrationScreen(
+                    onBackClick = {
+                        navHostController.popBackStack()
+                    },
+                    onNavigate = { route ->
+                        navHostController.navigate(route)
+                    }
+                )
+            }
 
-        composable(
-            route = Screens.Vitals.route
-        ) {
-            VitalsScreen(
-                onBackClick = {
-                    navHostController.popBackStack()
-                },
-                onNavigate = { route ->
-                    navHostController.navigate(route)
-                }
-            )
-        }
+            composable(
+                route = Screens.Vitals.route
+            ) {
+                VitalsScreen(
+                    onBackClick = {
+                        navHostController.popBackStack()
+                    },
+                    onNavigate = { route ->
+                        navHostController.navigate(route)
+                    }
+                )
+            }
 
-        composable(
-            route = Screens.Assessment.route,
-            arguments = listOf(
-                navArgument(
-                    name = NavArguments.BMI
-                ) {
-                    type = NavType.StringType
-                }
-            )
-        ) {
-            val bmi = it.arguments?.getString(NavArguments.BMI)?.toDoubleOrNull() ?: 0.0
-            AssessmentScreen(
-                bmi = bmi
-            )
+            composable(
+                route = Screens.Assessment.route,
+                arguments = listOf(
+                    navArgument(
+                        name = NavArguments.BMI
+                    ) {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+                val bmi = it.arguments?.getString(NavArguments.BMI)?.toDoubleOrNull() ?: 0.0
+                AssessmentScreen(
+                    bmi = bmi,
+                    onBackClick = {
+                        navHostController.popBackStack()
+                    },
+                    onSaveSuccess = {
+                        navHostController.navigate(Screens.Home.route) {
+                            popUpTo(Screens.AddNewPatientInfo.route) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            }
         }
     }
 }

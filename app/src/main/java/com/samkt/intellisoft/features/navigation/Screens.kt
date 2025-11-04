@@ -6,6 +6,7 @@ sealed class Screens(val route: String) {
     data object SignUp : Screens("sign_up")
     data object Home : Screens("home")
     data object AddNewPatient : Screens("add_new_patient")
+    data object AddNewPatientInfo : Screens("add_new_patient_info")
     data object Vitals : Screens("vitals")
     data object Assessment : Screens("assessment/{${NavArguments.BMI}}") {
         fun createRoute(bmi: String): String {

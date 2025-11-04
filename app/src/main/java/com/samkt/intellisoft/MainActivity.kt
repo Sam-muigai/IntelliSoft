@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.samkt.intellisoft.core.ui.theme.IntellisoftTheme
+import com.samkt.intellisoft.features.assessment.AssessmentScreen
 import com.samkt.intellisoft.features.navigation.App
 import com.samkt.intellisoft.features.signUp.SignUpScreen
 
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             IntellisoftTheme {
-                App()
+                 App()
             }
         }
     }

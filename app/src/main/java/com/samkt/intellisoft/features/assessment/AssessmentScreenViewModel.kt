@@ -1,7 +1,97 @@
 package com.samkt.intellisoft.features.assessment
 
-import android.view.View
 import androidx.lifecycle.ViewModel
+import com.samkt.intellisoft.utils.OneTimeEvents
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 
 class AssessmentScreenViewModel : ViewModel() {
+
+    private val _assessmentScreenState = MutableStateFlow(AssessmentScreenState())
+    val assessmentScreenState = _assessmentScreenState.asStateFlow()
+
+    private val _oneTimeEvents = Channel<OneTimeEvents>()
+    val oneTimeEvents = _oneTimeEvents.receiveAsFlow()
+
+    fun onEvent(event: AssessmentScreenEvent) {
+        when (event) {
+            is AssessmentScreenEvent.OnVisitDateChange -> {
+                _assessmentScreenState.update {
+                    it.copy(visitDate = event.date)
+                }
+            }
+
+            is AssessmentScreenEvent.OnCommentChange -> {
+                _assessmentScreenState.update {
+                    it.copy(comment = event.comment)
+                }
+            }
+
+            is AssessmentScreenEvent.OnGeneralHealthChange -> {
+                _assessmentScreenState.update {
+                    it.copy(generalHealth = event.health)
+                }
+            }
+
+            is AssessmentScreenEvent.OnDietToLoseWeightChange -> {
+                _assessmentScreenState.update {
+                    it.copy(onDietToLoseWeight = event.isOnDiet)
+                }
+            }
+
+            is AssessmentScreenEvent.OnCurrentlyTakingDrugsChange -> {
+                _assessmentScreenState.update {
+                    it.copy(currentlyTakingDrugs = event.isCurrentlyTakingDrugs)
+                }
+            }
+
+            is AssessmentScreenEvent.OnSubmit -> {
+                saveAssessment()
+            }
+        }
+    }
+
+    private fun saveAssessment() {
+        assessmentScreenState.value.apply {
+            when {
+                visitDate.isEmpty() -> {
+                    _assessmentScreenState.update {
+                        it.copy(
+                            visitDateError = "Visit date cannot be empty"
+                        )
+                    }
+                    return@apply
+                }
+            }
+            _oneTimeEvents.trySend(OneTimeEvents.PopBackStack)
+        }
+    }
+
+}
+
+
+data class AssessmentScreenState(
+    val isLoading: Boolean = false,
+    val patientName: String = "",
+    val visitDate: String = "",
+    val visitDateError: String? = null,
+    val generalHealth: String = "Good",
+    val onDietToLoseWeight: String = "Yes",
+    val currentlyTakingDrugs: String = "Yes",
+    val comment: String = "",
+    val isOverweight: Boolean = false
+)
+
+sealed interface AssessmentScreenEvent {
+    data class OnVisitDateChange(val date: String) : AssessmentScreenEvent
+    data class OnGeneralHealthChange(val health: String) : AssessmentScreenEvent
+    data class OnCommentChange(val comment: String) : AssessmentScreenEvent
+    data class OnDietToLoseWeightChange(val isOnDiet: String) : AssessmentScreenEvent
+    data class OnCurrentlyTakingDrugsChange(val isCurrentlyTakingDrugs: String) :
+        AssessmentScreenEvent
+
+    data object OnSubmit : AssessmentScreenEvent
 }
