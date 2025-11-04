@@ -5,6 +5,8 @@ import com.samkt.intellisoft.core.networking.dtos.AddPatientResponse
 import com.samkt.intellisoft.core.networking.dtos.LoginRequest
 import com.samkt.intellisoft.core.networking.dtos.LoginResponse
 import com.samkt.intellisoft.core.networking.dtos.PatientsResponse
+import com.samkt.intellisoft.core.networking.dtos.SaveVisitRequest
+import com.samkt.intellisoft.core.networking.dtos.SaveVisitResponse
 import com.samkt.intellisoft.core.networking.dtos.SaveVitalsRequest
 import com.samkt.intellisoft.core.networking.dtos.SaveVitalsResponse
 import com.samkt.intellisoft.core.networking.dtos.SignUpRequest
@@ -50,7 +52,7 @@ class IntellisoftApiServiceImpl(
             header(HttpHeaders.Authorization, "Bearer ${preferences.getAccessToken().first()}")
             contentType(ContentType.Application.Json)
             setBody(addPatientRequest)
-        }.body<AddPatientResponse>()
+        }.body()
     }
 
     override suspend fun setVitals(saveVitalsRequest: SaveVitalsRequest): SaveVitalsResponse {
@@ -65,6 +67,14 @@ class IntellisoftApiServiceImpl(
         return client.get(BASE_URL + "patients/view") {
             header(HttpHeaders.Authorization, "Bearer ${preferences.getAccessToken().first()}")
             contentType(ContentType.Application.Json)
+        }.body()
+    }
+
+    override suspend fun saveVisits(saveVisitRequest: SaveVisitRequest): SaveVisitResponse {
+        return client.post(BASE_URL + "visits/add") {
+            header(HttpHeaders.Authorization, "Bearer ${preferences.getAccessToken().first()}")
+            contentType(ContentType.Application.Json)
+            setBody(saveVisitRequest)
         }.body()
     }
 

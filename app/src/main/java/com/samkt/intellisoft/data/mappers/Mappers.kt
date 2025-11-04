@@ -5,6 +5,7 @@ import com.samkt.intellisoft.core.database.entities.PatientEntity
 import com.samkt.intellisoft.core.database.entities.VitalsEntity
 import com.samkt.intellisoft.core.networking.dtos.AddPatientRequest
 import com.samkt.intellisoft.core.networking.dtos.LoginRequest
+import com.samkt.intellisoft.core.networking.dtos.SaveVisitRequest
 import com.samkt.intellisoft.core.networking.dtos.SaveVitalsRequest
 import com.samkt.intellisoft.core.networking.dtos.SignUpRequest
 import com.samkt.intellisoft.domain.model.Assessment
@@ -109,6 +110,33 @@ fun Assessment.toEntity(): AssessmentEntity {
         comments = comments,
         visitDate = visitDate,
         vitalId = vitalId,
+    )
+}
+
+
+fun AssessmentEntity.toDomain(): Assessment {
+    return Assessment(
+        id = id,
+        generalHealth = generalHealth,
+        onDiet = onDiet,
+        onDrugs = onDrugs,
+        comments = comments,
+        visitDate = visitDate,
+        vitalId = vitalId,
+        patientBackendId = patientBackendId,
+        vitalsBackendId = vitalBackendId
+    )
+}
+
+fun Assessment.toData(): SaveVisitRequest {
+    return SaveVisitRequest(
+        comments = comments,
+        generalHealth = generalHealth,
+        onDiet = onDiet,
+        onDrugs = onDrugs,
+        patientId = patientBackendId,
+        visitDate = visitDate.formatDate(),
+        vitalId = vitalsBackendId
     )
 }
 

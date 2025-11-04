@@ -2,10 +2,10 @@ package com.samkt.intellisoft.data.repositories
 
 import android.util.Log
 import com.samkt.intellisoft.core.database.IntellisoftDatabase
+import com.samkt.intellisoft.core.database.entities.AssessmentEntity
 import com.samkt.intellisoft.core.database.entities.VitalsEntity
 import com.samkt.intellisoft.core.networking.IntellisoftApiService
 import com.samkt.intellisoft.core.networking.dtos.PatientData
-import com.samkt.intellisoft.core.networking.dtos.SaveVitalsRequest
 import com.samkt.intellisoft.data.mappers.toData
 import com.samkt.intellisoft.data.mappers.toDomain
 import com.samkt.intellisoft.data.mappers.toEntity
@@ -13,14 +13,12 @@ import com.samkt.intellisoft.domain.model.Assessment
 import com.samkt.intellisoft.domain.model.Patient
 import com.samkt.intellisoft.domain.model.Vitals
 import com.samkt.intellisoft.domain.repositories.PatientRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 
 class PatientRepositoryImpl(
     db: IntellisoftDatabase,
@@ -83,16 +81,59 @@ class PatientRepositoryImpl(
 
     private suspend fun saveVitalToBackend(vitalsEntity: VitalsEntity) {
         runCatching {
-            intellisoftApiService.setVitals(vitalsEntity.toDomain().toData())
+            val response = intellisoftApiService.setVitals(vitalsEntity.toDomain().toData())
+            val assessmentEntities = assessmentDao.getAssessmentsByVitalId(vitalsEntity.id).first()
+            assessmentEntities.forEach { assessment ->
+                updateAssessmentBackendIds(
+                    assessmentId = assessment.id,
+                    patientBackendId = vitalsEntity.patientBackendId,
+                    vitalsBackendId = response.saveVitalsData.id.toString()
+                )
+            }
+            val assessments = assessmentDao.getAssessmentsByVitalId(vitalsEntity.id).first()
+            syncAssessments(assessments)
         }.onSuccess {
             vitalsDao.updateSyncStatus(vitalsEntity.id, true)
         }
     }
 
-    private suspend fun updateVitalsBackedId(patientId: Int, backendId: String) {
+    private suspend fun syncAssessments(
+        assessments: List<AssessmentEntity>
+    ) {
+        coroutineScope {
+            val assessmentTask = assessments.map { assessment ->
+                async {
+                    saveAssessmentToBackend(assessment)
+                }
+            }
+            assessmentTask.awaitAll()
+        }
+    }
+
+    private suspend fun saveAssessmentToBackend(assessment: AssessmentEntity) {
+        runCatching {
+            intellisoftApiService.saveVisits(assessment.toDomain().toData())
+        }.onSuccess {
+            assessmentDao.updateSyncStatus(assessmentId = assessment.id, true)
+        }
+    }
+
+    private suspend fun updateVitalsBackedId(patientId: Int, patientBackendId: String) {
         vitalsDao.setPatientBackendId(
             patientId = patientId,
-            patientBackendId = backendId
+            patientBackendId = patientBackendId
+        )
+    }
+
+    private suspend fun updateAssessmentBackendIds(
+        assessmentId: Int,
+        patientBackendId: String,
+        vitalsBackendId: String
+    ) {
+        val rows = assessmentDao.setBackendIdsForAssessment(
+            assessmentId = assessmentId,
+            patientBackendId = patientBackendId,
+            vitalBackendId = vitalsBackendId
         )
     }
 

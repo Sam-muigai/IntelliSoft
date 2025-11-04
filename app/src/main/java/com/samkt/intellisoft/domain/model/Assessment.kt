@@ -10,4 +10,6 @@ data class Assessment (
     val comments: String,
     val visitDate: LocalDate,
     val vitalId: Int,
+    val patientBackendId:String = "",
+    val vitalsBackendId: String = ""
 )

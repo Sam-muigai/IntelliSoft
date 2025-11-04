@@ -5,6 +5,8 @@ import com.samkt.intellisoft.core.networking.dtos.AddPatientResponse
 import com.samkt.intellisoft.core.networking.dtos.LoginRequest
 import com.samkt.intellisoft.core.networking.dtos.LoginResponse
 import com.samkt.intellisoft.core.networking.dtos.PatientsResponse
+import com.samkt.intellisoft.core.networking.dtos.SaveVisitRequest
+import com.samkt.intellisoft.core.networking.dtos.SaveVisitResponse
 import com.samkt.intellisoft.core.networking.dtos.SaveVitalsRequest
 import com.samkt.intellisoft.core.networking.dtos.SaveVitalsResponse
 import com.samkt.intellisoft.core.networking.dtos.SignUpRequest
@@ -17,4 +19,5 @@ interface IntellisoftApiService {
     suspend fun savePatient(addPatientRequest: AddPatientRequest): AddPatientResponse
     suspend fun setVitals(saveVitalsRequest: SaveVitalsRequest): SaveVitalsResponse
     suspend fun getPatients(): PatientsResponse
+    suspend fun saveVisits(saveVisitRequest: SaveVisitRequest): SaveVisitResponse
 }

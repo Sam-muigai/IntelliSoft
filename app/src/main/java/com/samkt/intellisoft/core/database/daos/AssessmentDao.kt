@@ -16,10 +16,13 @@ interface AssessmentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAssessment(assessment: AssessmentEntity): Long
 
-    @Query("UPDATE assessments SET patientBackendId = :patientBackendId AND vitalBackendId = :vitalBackendId WHERE id = :assessmentId")
+    @Query("UPDATE assessments SET patientBackendId = :patientBackendId, vitalBackendId = :vitalBackendId WHERE id = :assessmentId")
     suspend fun setBackendIdsForAssessment(
         assessmentId: Int,
         patientBackendId: String,
         vitalBackendId: String
-    )
+    ): Int
+
+    @Query("UPDATE assessments SET isSynced = :isSynced WHERE id = :assessmentId")
+    suspend fun updateSyncStatus(assessmentId: Int, isSynced: Boolean)
 }
