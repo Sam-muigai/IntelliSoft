@@ -182,13 +182,17 @@ fun SignUpScreenContent(
                     }
                 }
             }
-            Row {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(
                     text = "Already have an account? ",
+                    style = MaterialTheme.typography.bodyMedium,
                 )
                 Text(
                     text = "Sign In",
                     color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.clickable(onClick = onSignInClick)
                 )
             }

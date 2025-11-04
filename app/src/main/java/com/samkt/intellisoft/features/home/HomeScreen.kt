@@ -53,7 +53,9 @@ fun HomeScreen(
         homeScreenViewModel.homeScreenUiState.collectAsStateWithLifecycle().value
 
     LaunchedEffect(true) {
-        homeScreenViewModel.getPatients(getTodaysDate())
+        homeScreenViewModel.getPatients(
+            date
+        )
     }
 
     HomeScreenContent(
