@@ -51,6 +51,7 @@ class HomeScreenViewModel(
     private fun getPatients(
         date: String
     ) {
+        _homeScreenUiState.update { HomeScreenUiState.Loading }
         viewModelScope.launch {
             when (val result = patientRepository.getVisits(date)) {
                 is Result.Error -> {

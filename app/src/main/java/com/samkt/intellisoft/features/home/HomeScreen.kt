@@ -1,6 +1,7 @@
 package com.samkt.intellisoft.features.home
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,6 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.samkt.intellisoft.core.ui.components.TibaDatePicker
@@ -41,7 +47,8 @@ fun HomeScreen(
 ) {
     val user = homeScreenViewModel.user.collectAsStateWithLifecycle().value
     val date = homeScreenViewModel.date
-    val homeScreenUiState = homeScreenViewModel.homeScreenUiState.collectAsStateWithLifecycle().value
+    val homeScreenUiState =
+        homeScreenViewModel.homeScreenUiState.collectAsStateWithLifecycle().value
     HomeScreenContent(
         user = user,
         onAddPatientClick = onAddPatientClick,
@@ -116,7 +123,10 @@ fun HomeScreenContent(
         ) {
             Text(
                 "Patient's listing",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold
+                ),
+                textDecoration = TextDecoration.Underline
             )
             TibaDatePicker(
                 value = date,
@@ -124,7 +134,10 @@ fun HomeScreenContent(
                 label = "Registration Date",
                 placeHolder = "Choose a date"
             )
-            AnimatedContent(homeScreenUiState) { state ->
+            AnimatedContent(
+                modifier = Modifier.padding(top = 8.dp),
+                targetState = homeScreenUiState
+            ) { state ->
                 when (state) {
                     is HomeScreenUiState.Error -> {
                         Box(
@@ -149,8 +162,66 @@ fun HomeScreenContent(
                             modifier = Modifier.fillMaxSize(),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
+                            item {
+                                Column {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(MaterialTheme.colorScheme.primary)
+                                            .padding(8.dp),
+                                    ) {
+                                        Text(
+                                            text = "Patient's Name",
+                                            color = MaterialTheme.colorScheme.onPrimary,
+                                            modifier = Modifier.weight(1f),
+                                            style = MaterialTheme.typography.titleMedium,
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            text = "Age",
+                                            color = MaterialTheme.colorScheme.onPrimary,
+                                            modifier = Modifier.weight(1f),
+                                            style = MaterialTheme.typography.titleMedium,
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            text = "BMI Status",
+                                            color = MaterialTheme.colorScheme.onPrimary,
+                                            modifier = Modifier.weight(1f),
+                                            style = MaterialTheme.typography.titleMedium,
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                }
+                            }
                             items(state.visits) { visit ->
-                                Text(visit.name)
+                                Column {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(8.dp),
+                                    ) {
+                                        Text(
+                                            text = visit.name,
+                                            modifier = Modifier.weight(1f),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            text = visit.age.toString(),
+                                            modifier = Modifier.weight(1f),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            text = visit.bmiStatus,
+                                            modifier = Modifier.weight(1f),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                    HorizontalDivider()
+                                }
                             }
                         }
                     }

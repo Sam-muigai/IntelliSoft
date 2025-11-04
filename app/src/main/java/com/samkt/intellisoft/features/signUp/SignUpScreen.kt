@@ -2,6 +2,7 @@ package com.samkt.intellisoft.features.signUp
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -18,10 +21,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.samkt.intellisoft.R
 import com.samkt.intellisoft.core.ui.components.TibaFilledButton
 import com.samkt.intellisoft.core.ui.components.TibaPasswordTextField
 import com.samkt.intellisoft.core.ui.components.TibaTextField
@@ -43,6 +51,10 @@ fun SignUpScreen(
             when (event) {
                 is OneTimeEvents.ShowMessage -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is OneTimeEvents.Navigate -> {
+                    onSignUpSuccess()
                 }
 
                 else -> Unit
@@ -71,15 +83,35 @@ fun SignUpScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.logo),
+                    contentDescription = "Logo",
+                    modifier = Modifier.size(180.dp),
+                    contentScale = ContentScale.Crop
+                )
+                Text(
+                    text = "IntelliSoft",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                )
+            }
             TibaTextField(
                 value = signUpScreenState.email,
                 onValueChange = {
                     onEvent(SignUpScreenEvent.OnEmailChange(it))
                 },
                 label = "Email",
+                placeHolder = "example@gmail.com",
                 errorMessage = signUpScreenState.emailError
             )
             TibaTextField(
@@ -88,6 +120,7 @@ fun SignUpScreenContent(
                     onEvent(SignUpScreenEvent.OnFirstNameChange(it))
                 },
                 label = "First Name",
+                placeHolder = "Enter your first name",
                 errorMessage = signUpScreenState.firstNameError
             )
             TibaTextField(
@@ -96,6 +129,7 @@ fun SignUpScreenContent(
                     onEvent(SignUpScreenEvent.OnLastNameChange(it))
                 },
                 label = "Last Name",
+                placeHolder = "Enter your last name",
                 errorMessage = signUpScreenState.lastNameError
             )
             TibaPasswordTextField(
@@ -104,6 +138,7 @@ fun SignUpScreenContent(
                     onEvent(SignUpScreenEvent.OnPasswordChange(it))
                 },
                 label = "Password",
+                placeHolder = "********",
                 isPasswordVisible = signUpScreenState.passwordVisible,
                 onIconButtonClicked = {
                     onEvent(SignUpScreenEvent.OnPasswordVisibilityChange)
@@ -116,6 +151,7 @@ fun SignUpScreenContent(
                     onEvent(SignUpScreenEvent.OnConfirmPasswordChange(it))
                 },
                 label = "Confirm Password",
+                placeHolder = "********",
                 isPasswordVisible = signUpScreenState.confirmPasswordVisible,
                 onIconButtonClicked = {
                     onEvent(SignUpScreenEvent.OnConfirmPasswordVisibilityChange)

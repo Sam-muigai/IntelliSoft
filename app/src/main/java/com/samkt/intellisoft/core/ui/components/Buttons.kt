@@ -17,7 +17,7 @@ fun TibaFilledButton(
 ) {
     Button(
         modifier = modifier
-            .height(56.dp),
+            .height(48.dp),
         onClick = onClick,
         shape = MaterialTheme.shapes.medium,
     ) {

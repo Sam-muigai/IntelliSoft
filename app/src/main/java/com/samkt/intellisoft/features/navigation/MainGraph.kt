@@ -49,6 +49,14 @@ fun App() {
                     onSignInClick = {
                         navHostController.navigate(Screens.Login.route)
                     },
+                    onSignUpSuccess = {
+                        navHostController.navigate(Screens.Login.route) {
+                            popUpTo(Screens.SignUp.route) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    }
                 )
             }
         }

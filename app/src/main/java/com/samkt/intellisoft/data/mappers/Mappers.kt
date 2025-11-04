@@ -146,10 +146,20 @@ fun Assessment.toData(): SaveVisitRequest {
 fun VisitData.toDomain(): Visit {
     return Visit(
         age = age,
-        bmi = bmi,
+        bmiStatus = bmi.getBmiStatus(),
         status = status,
         name = name
     )
+}
+
+
+private fun String.getBmiStatus(): String {
+    val bmi = this.toDoubleOrNull() ?: 0.0
+    return when {
+        bmi < 18.5 -> "Underweight"
+        bmi in 18.5..25.0 -> "Normal"
+        else -> "Overweight"
+    }
 }
 
 private fun calculateBmi(

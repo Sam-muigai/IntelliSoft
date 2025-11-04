@@ -2,6 +2,7 @@ package com.samkt.intellisoft.features.login
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,10 +17,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.samkt.intellisoft.R
 import com.samkt.intellisoft.core.ui.components.TibaFilledButton
 import com.samkt.intellisoft.core.ui.components.TibaPasswordTextField
 import com.samkt.intellisoft.core.ui.components.TibaTextField
@@ -73,8 +79,27 @@ fun LoginScreenContent(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.logo),
+                    contentDescription = "Logo",
+                    modifier = Modifier.size(180.dp),
+                    contentScale = ContentScale.Crop
+                )
+                Text(
+                    text = "IntelliSoft",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                )
+            }
+
             TibaTextField(
                 value = loginScreenState.email,
                 onValueChange = {
@@ -121,13 +146,18 @@ fun LoginScreenContent(
                     }
                 }
             }
-            Row {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+            ) {
                 Text(
                     text = "Are you new here? ",
+                    style = MaterialTheme.typography.bodyMedium,
                 )
                 Text(
                     text = "Sign up",
                     color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.clickable(onClick = onSignUpClick)
                 )
             }

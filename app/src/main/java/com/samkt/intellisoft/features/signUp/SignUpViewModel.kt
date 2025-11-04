@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.samkt.intellisoft.domain.helpers.Result
 import com.samkt.intellisoft.domain.model.SignUp
 import com.samkt.intellisoft.domain.repositories.AuthRepository
+import com.samkt.intellisoft.features.navigation.Screens
 import com.samkt.intellisoft.utils.OneTimeEvents
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -191,7 +192,7 @@ class SignUpViewModel(
                                 isLoading = false
                             )
                         }
-                        _oneTimeEvents.send(OneTimeEvents.ShowMessage(result.data))
+                        _oneTimeEvents.send(OneTimeEvents.Navigate(Screens.Login.route))
                     }
                 }
             }
