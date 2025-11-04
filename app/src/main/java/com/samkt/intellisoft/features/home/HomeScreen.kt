@@ -24,8 +24,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.samkt.intellisoft.core.ui.components.TibaDatePicker
 import com.samkt.intellisoft.core.ui.components.TibaFilledButton
 import com.samkt.intellisoft.domain.model.User
+import com.samkt.intellisoft.features.patientRegistration.AddPatientScreenEvent
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -34,9 +36,12 @@ fun HomeScreen(
     onAddPatientClick: () -> Unit = {}
 ) {
     val user = homeScreenViewModel.user.collectAsStateWithLifecycle().value
+    val homeScreenState = homeScreenViewModel.homeScreenState.collectAsStateWithLifecycle().value
     HomeScreenContent(
         user = user,
-        onAddPatientClick = onAddPatientClick
+        onAddPatientClick = onAddPatientClick,
+        homeScreenState = homeScreenState,
+        onDateChange = homeScreenViewModel::onDateChange
     )
 }
 
@@ -45,7 +50,9 @@ fun HomeScreen(
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
     user: User,
-    onAddPatientClick: () -> Unit = {}
+    onAddPatientClick: () -> Unit = {},
+    homeScreenState: HomeScreenState,
+    onDateChange: (String) -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -100,7 +107,16 @@ fun HomeScreenContent(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-
+            Text(
+                "Patient's listing",
+                style = MaterialTheme.typography.titleMedium
+            )
+            TibaDatePicker(
+                value = homeScreenState.date,
+                onValueChange = onDateChange,
+                label = "Registration Date",
+                placeHolder = "Choose a date"
+            )
         }
     }
 }
