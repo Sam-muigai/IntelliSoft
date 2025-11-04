@@ -5,13 +5,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SaveVisitResponse(
-    @SerialName("code")
-    val code: Int,
-    @SerialName("data")
-    val saveVisitData: SaveVisitData,
+data class SaveVisitData(
     @SerialName("message")
     val message: String,
-    @SerialName("success")
-    val success: Boolean
+    @SerialName("slug")
+    val slug: Int
 )

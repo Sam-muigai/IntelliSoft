@@ -5,12 +5,15 @@ import com.samkt.intellisoft.core.database.IntellisoftDatabase
 import com.samkt.intellisoft.core.database.entities.AssessmentEntity
 import com.samkt.intellisoft.core.database.entities.VitalsEntity
 import com.samkt.intellisoft.core.networking.IntellisoftApiService
+import com.samkt.intellisoft.core.networking.dtos.GetVisitsRequest
 import com.samkt.intellisoft.core.networking.dtos.PatientData
+import com.samkt.intellisoft.core.networking.helpers.ApiResponse
 import com.samkt.intellisoft.data.mappers.toData
 import com.samkt.intellisoft.data.mappers.toDomain
 import com.samkt.intellisoft.data.mappers.toEntity
 import com.samkt.intellisoft.domain.model.Assessment
 import com.samkt.intellisoft.domain.model.Patient
+import com.samkt.intellisoft.domain.model.Visit
 import com.samkt.intellisoft.domain.model.Vitals
 import com.samkt.intellisoft.domain.repositories.PatientRepository
 import kotlinx.coroutines.async
@@ -19,6 +22,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import com.samkt.intellisoft.domain.helpers.Result
 
 class PatientRepositoryImpl(
     db: IntellisoftDatabase,
@@ -48,11 +52,11 @@ class PatientRepositoryImpl(
         return vitalsDao.saveVitals(vitals.toEntity()).toInt()
     }
 
-    override suspend fun syncPatientData(patientId: Int): Result<String> {
+    override suspend fun syncPatientData(patientId: Int): kotlin.Result<String> {
         val patientEntity = patientDao.getPatientById(patientId).first()
         if (patientEntity == null) {
             Log.w("Sync", "No patient found with ID: $patientId")
-            return Result.failure(Exception("No patient found with ID: $patientId"))
+            return kotlin.Result.failure(Exception("No patient found with ID: $patientId"))
         }
         val patient = patientEntity.toDomain()
 
@@ -67,6 +71,14 @@ class PatientRepositoryImpl(
             val vitals = vitalsDao.getVitals(patientId).first()
             syncVitals(vitals)
             "Patient data synced successfully"
+        }
+    }
+
+    override suspend fun getVisits(date: String): Result<List<Visit>> {
+        val getVisitsRequest = GetVisitsRequest(date)
+        return when (val response = intellisoftApiService.getVisits(getVisitsRequest)) {
+            is ApiResponse.Error -> Result.Error(response.errorMessage)
+            is ApiResponse.Success -> Result.Success(response.data.visits.map { it.toDomain() })
         }
     }
 
@@ -130,7 +142,7 @@ class PatientRepositoryImpl(
         patientBackendId: String,
         vitalsBackendId: String
     ) {
-        val rows = assessmentDao.setBackendIdsForAssessment(
+        assessmentDao.setBackendIdsForAssessment(
             assessmentId = assessmentId,
             patientBackendId = patientBackendId,
             vitalBackendId = vitalsBackendId

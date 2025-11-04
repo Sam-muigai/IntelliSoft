@@ -6,8 +6,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class VisitData(
-    @SerialName("message")
-    val message: String,
-    @SerialName("slug")
-    val slug: Int
+    @SerialName("age")
+    val age: Int,
+    @SerialName("bmi")
+    val bmi: String,
+    @SerialName("name")
+    val name: String,
+    @SerialName("status")
+    val status: String
 )

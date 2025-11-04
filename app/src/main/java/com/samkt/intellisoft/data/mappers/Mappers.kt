@@ -8,10 +8,12 @@ import com.samkt.intellisoft.core.networking.dtos.LoginRequest
 import com.samkt.intellisoft.core.networking.dtos.SaveVisitRequest
 import com.samkt.intellisoft.core.networking.dtos.SaveVitalsRequest
 import com.samkt.intellisoft.core.networking.dtos.SignUpRequest
+import com.samkt.intellisoft.core.networking.dtos.VisitData
 import com.samkt.intellisoft.domain.model.Assessment
 import com.samkt.intellisoft.domain.model.Login
 import com.samkt.intellisoft.domain.model.Patient
 import com.samkt.intellisoft.domain.model.SignUp
+import com.samkt.intellisoft.domain.model.Visit
 import com.samkt.intellisoft.domain.model.Vitals
 import com.samkt.intellisoft.utils.formatDate
 import kotlinx.coroutines.flow.update
@@ -137,6 +139,16 @@ fun Assessment.toData(): SaveVisitRequest {
         patientId = patientBackendId,
         visitDate = visitDate.formatDate(),
         vitalId = vitalsBackendId
+    )
+}
+
+
+fun VisitData.toDomain(): Visit {
+    return Visit(
+        age = age,
+        bmi = bmi,
+        status = status,
+        name = name
     )
 }
 

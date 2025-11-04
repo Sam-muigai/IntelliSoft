@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "app_prefs")
 
 interface AppPreferences {
     suspend fun saveAccessToken(token: String)

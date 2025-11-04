@@ -2,6 +2,8 @@ package com.samkt.intellisoft.core.networking
 
 import com.samkt.intellisoft.core.networking.dtos.AddPatientRequest
 import com.samkt.intellisoft.core.networking.dtos.AddPatientResponse
+import com.samkt.intellisoft.core.networking.dtos.GetVisitsRequest
+import com.samkt.intellisoft.core.networking.dtos.GetVisitsResponse
 import com.samkt.intellisoft.core.networking.dtos.LoginRequest
 import com.samkt.intellisoft.core.networking.dtos.LoginResponse
 import com.samkt.intellisoft.core.networking.dtos.PatientsResponse
@@ -76,6 +78,16 @@ class IntellisoftApiServiceImpl(
             contentType(ContentType.Application.Json)
             setBody(saveVisitRequest)
         }.body()
+    }
+
+    override suspend fun getVisits(getVisitsRequest: GetVisitsRequest): ApiResponse<GetVisitsResponse> {
+        return safeApiCall {
+            client.post(BASE_URL + "visits/view") {
+                header(HttpHeaders.Authorization, "Bearer ${preferences.getAccessToken().first()}")
+                contentType(ContentType.Application.Json)
+                setBody(getVisitsRequest)
+            }
+        }
     }
 
 

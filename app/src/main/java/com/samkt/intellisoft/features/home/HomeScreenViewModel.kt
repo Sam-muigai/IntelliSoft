@@ -1,9 +1,15 @@
 package com.samkt.intellisoft.features.home
 
 import android.icu.text.DateFormat
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.samkt.intellisoft.domain.helpers.Result
 import com.samkt.intellisoft.domain.model.User
+import com.samkt.intellisoft.domain.model.Visit
+import com.samkt.intellisoft.domain.repositories.PatientRepository
 import com.samkt.intellisoft.domain.repositories.UserRepository
 import com.samkt.intellisoft.utils.getTodaysDate
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,11 +17,13 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class HomeScreenViewModel(
-    userRepository: UserRepository
+    userRepository: UserRepository,
+    private val patientRepository: PatientRepository
 ) : ViewModel() {
 
     val user = userRepository.getUser()
@@ -25,23 +33,45 @@ class HomeScreenViewModel(
             User()
         )
 
-    private val _homeScreenState = MutableStateFlow(HomeScreenState())
-    val homeScreenState = _homeScreenState.asStateFlow()
+    private val _homeScreenUiState = MutableStateFlow<HomeScreenUiState>(HomeScreenUiState.Loading)
+    val homeScreenUiState = _homeScreenUiState.asStateFlow()
+
+    var date by mutableStateOf(getTodaysDate())
+        private set
+
+    init {
+        getPatients(getTodaysDate())
+    }
 
     fun onDateChange(date: String) {
-        _homeScreenState.update {
-            it.copy(
-                date = date
-            )
+        this.date = date
+        getPatients(date)
+    }
+
+    private fun getPatients(
+        date: String
+    ) {
+        viewModelScope.launch {
+            when (val result = patientRepository.getVisits(date)) {
+                is Result.Error -> {
+                    _homeScreenUiState.update { HomeScreenUiState.Error(result.message) }
+                }
+
+                is Result.Success -> {
+                    _homeScreenUiState.update { HomeScreenUiState.Success(result.data) }
+                }
+            }
         }
     }
 
 }
 
 
-data class HomeScreenState(
-    val date: String = getTodaysDate()
-)
+sealed interface HomeScreenUiState {
+    data object Loading : HomeScreenUiState
+    data class Success(val visits: List<Visit>) : HomeScreenUiState
+    data class Error(val message: String) : HomeScreenUiState
+}
 
 
 fun getInitials(name: String): String {
