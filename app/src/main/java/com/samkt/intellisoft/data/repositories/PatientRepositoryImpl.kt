@@ -19,11 +19,16 @@ class PatientRepositoryImpl(
         return patientDao.savePatient(patient.toEntity()).toInt()
     }
 
+    override fun getPatientByPatientNumber(patientNumber: String): Flow<Patient?> {
+        return patientDao.getPatientByPatientNumber(patientNumber).map { it?.toDomain() }
+    }
+
+    override fun getPatient(patientId: Int): Flow<Patient?> {
+        return patientDao.getPatientById(patientId).map { it?.toDomain() }
+    }
+
     override suspend fun saveVitalsInformation(vitals: Vitals): Int {
         return vitalsDao.saveVitals(vitals.toEntity()).toInt()
     }
 
-    override fun getPatient(patientId: Int): Flow<Patient> {
-        return patientDao.getPatientById(patientId).map { it.toDomain() }
-    }
 }

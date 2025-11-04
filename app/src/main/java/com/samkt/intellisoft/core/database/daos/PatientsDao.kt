@@ -13,5 +13,8 @@ interface PatientsDao {
     suspend fun savePatient(patientEntity: PatientEntity): Long
 
     @Query("SELECT * FROM patients WHERE id = :patientId")
-    fun getPatientById(patientId: Int): Flow<PatientEntity>
+    fun getPatientById(patientId: Int): Flow<PatientEntity?>
+
+    @Query("SELECT * FROM patients WHERE patientNumber = :patientNumber")
+    fun getPatientByPatientNumber(patientNumber: String): Flow<PatientEntity?>
 }

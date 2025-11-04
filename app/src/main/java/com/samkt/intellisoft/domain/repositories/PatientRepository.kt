@@ -10,5 +10,7 @@ interface PatientRepository {
 
     suspend fun saveVitalsInformation(vitals: Vitals): Int
 
-    fun getPatient(patientId: Int): Flow<Patient>
+    fun getPatient(patientId: Int): Flow<Patient?>
+
+    fun getPatientByPatientNumber(patientNumber: String): Flow<Patient?>
 }

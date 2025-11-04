@@ -32,7 +32,7 @@ class VitalsScreenViewModel(
         viewModelScope.launch {
             patientRepository.getPatient(patientId).collect { patient ->
                 _vitalsScreenState.update {
-                    it.copy(patientName = "${patient.firstName} ${patient.lastName}")
+                    it.copy(patientName = "${patient?.firstName} ${patient?.lastName}")
                 }
             }
         }
@@ -98,12 +98,16 @@ class VitalsScreenViewModel(
             }
             viewModelScope.launch {
                 val vitals = Vitals(
+                    id = vitalsId,
                     height = height,
                     weight = weight,
                     patientId = patientId,
                     visitDate = LocalDate.parse(visitDate),
                 )
-                patientRepository.saveVitalsInformation(vitals)
+               val vitalsId =  patientRepository.saveVitalsInformation(vitals)
+                _vitalsScreenState.update {
+                    it.copy(vitalsId = vitalsId)
+                }
                 _oneTimeEvents.trySend(
                     OneTimeEvents.Navigate(
                         Screens.Assessment.createRoute(
@@ -142,7 +146,8 @@ data class VitalsScreenState(
     val weight: String = "",
     val weightError: String? = null,
     val bmi: String = "",
-    val patientId: Int = 0
+    val patientId: Int = 0,
+    val vitalsId: Int = 0
 )
 
 sealed interface VitalsScreenEvent {

@@ -9,6 +9,7 @@ import com.samkt.intellisoft.utils.OneTimeEvents
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -131,16 +132,30 @@ class PatientRegistrationScreenViewModel(
                 }
             }
             viewModelScope.launch {
-                val patient = Patient(
-                    patientNumber = patientNumber,
-                    registrationDate = LocalDate.parse(registrationDate),
-                    firstName = firstName,
-                    lastName = lastName,
-                    dateOfBirth = LocalDate.parse(registrationDate),
-                    gender = gender
-                )
-                val patientId = patientRepository.savePatient(patient)
-                _oneTimeEvent.send(OneTimeEvents.Navigate(Screens.Vitals.createRoute(patientId)))
+                if (patientId == 0 && patientRepository.getPatientByPatientNumber(patientNumber).first() != null) {
+                    _addPatientScreenState.update {
+                        it.copy(patientNumberError = "Patient is already registered")
+                    }
+
+                } else {
+                    val patient = Patient(
+                        id = patientId,
+                        patientNumber = patientNumber,
+                        registrationDate = LocalDate.parse(registrationDate),
+                        firstName = firstName,
+                        lastName = lastName,
+                        dateOfBirth = LocalDate.parse(dob),
+                        gender = gender
+                    )
+
+                    val savedPatientId = patientRepository.savePatient(patient)
+                    _addPatientScreenState.update {
+                        it.copy(
+                            patientId = savedPatientId
+                        )
+                    }
+                    _oneTimeEvent.send(OneTimeEvents.Navigate(Screens.Vitals.createRoute(savedPatientId)))
+                }
             }
         }
     }
@@ -173,6 +188,7 @@ data class AddPatientScreenState(
     val dobError: String? = null,
     val gender: String = "",
     val genderError: String? = null,
+    val patientId: Int = 0
 )
 
 sealed interface AddPatientScreenEvent {

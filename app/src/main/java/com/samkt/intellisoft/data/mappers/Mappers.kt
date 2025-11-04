@@ -28,6 +28,7 @@ fun Login.toData(): LoginRequest {
 
 fun Patient.toEntity(): PatientEntity {
     return PatientEntity(
+        id = id,
         patientNumber = patientNumber,
         firstName = firstName,
         lastName = lastName,
@@ -46,11 +47,13 @@ fun PatientEntity.toDomain(): Patient {
         gender = gender,
         registrationDate = registrationDate,
         dateOfBirth = dateOfBirth,
+        id = id
     )
 }
 
 fun Vitals.toEntity(): VitalsEntity {
     return VitalsEntity(
+        id = id,
         height = height,
         weight = weight,
         visitDate = visitDate,
