@@ -1,10 +1,13 @@
 package com.samkt.intellisoft.features.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.samkt.intellisoft.features.assessment.AssessmentScreen
 import com.samkt.intellisoft.features.patientRegistration.PatientRegistrationScreen
 import com.samkt.intellisoft.features.home.HomeScreen
 import com.samkt.intellisoft.features.login.LoginScreen
@@ -61,7 +64,7 @@ fun App() {
 
         composable(
             route = Screens.AddNewPatient.route
-        ){
+        ) {
             PatientRegistrationScreen(
                 onBackClick = {
                     navHostController.popBackStack()
@@ -78,7 +81,26 @@ fun App() {
             VitalsScreen(
                 onBackClick = {
                     navHostController.popBackStack()
+                },
+                onNavigate = { route ->
+                    navHostController.navigate(route)
                 }
+            )
+        }
+
+        composable(
+            route = Screens.Assessment.route,
+            arguments = listOf(
+                navArgument(
+                    name = NavArguments.BMI
+                ) {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            val bmi = it.arguments?.getString(NavArguments.BMI)?.toDoubleOrNull() ?: 0.0
+            AssessmentScreen(
+                bmi = bmi
             )
         }
     }

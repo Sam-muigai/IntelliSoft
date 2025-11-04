@@ -7,4 +7,13 @@ sealed class Screens(val route: String) {
     data object Home : Screens("home")
     data object AddNewPatient : Screens("add_new_patient")
     data object Vitals : Screens("vitals")
+    data object Assessment : Screens("assessment/{${NavArguments.BMI}}") {
+        fun createRoute(bmi: String): String {
+            return "assessment/$bmi"
+        }
+    }
+}
+
+object NavArguments {
+    const val BMI = "bmi"
 }
