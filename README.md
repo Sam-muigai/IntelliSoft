@@ -30,6 +30,77 @@
   </tr>
 </table>
 
+## Architecture
+
+The application follows **Clean Architecture** principles with clear separation of concerns across
+three main layers:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        PRESENTATION LAYER                       │
+├─────────────────────────────────────────────────────────────────┤
+│  features/                                                      │
+│  ├── login/           - Login UI & ViewModel                    │
+│  ├── signUp/          - Registration UI & ViewModel             │
+│  ├── home/            - Patient listing UI & ViewModel          │
+│  ├── patientRegistration/ - Patient reg UI & ViewModel          │
+│  ├── vitals/          - Vitals capture UI & ViewModel           │
+│  ├── assessment/      - Assessment UI & ViewModel               │
+│  └── navigation/      - Navigation graph & screen definitions   │
+│                                                                 │
+│  core/ui/                                                       │
+│  ├── components/      - Reusable UI components                  │
+│  └── theme/          - Material 3 theming                       │
+└─────────────────────────────────────────────────────────────────┘
+                                   │
+                                   ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                         DOMAIN LAYER                            │
+├─────────────────────────────────────────────────────────────────┤
+│  domain/                                                        │
+│  ├── model/          - Business entities                        │
+│  │   ├── Patient.kt                                             │
+│  │   ├── User.kt                                                │
+│  │   ├── Vitals.kt                                              │
+│  │   ├── Assessment.kt                                          │
+│  │   └── Visit.kt                                               │
+│  ├── repositories/   - Repository interfaces                    │
+│  │   ├── AuthRepository.kt                                      │
+│  │   ├── PatientRepository.kt                                   │
+│  │   └── UserRepository.kt                                      │
+│  └── helpers/        - Business logic helpers                   │
+│      └── Result.kt                                              │
+└─────────────────────────────────────────────────────────────────┘
+                                   │
+                                   ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                          DATA LAYER                             │
+├─────────────────────────────────────────────────────────────────┤
+│  data/                                                          │
+│  ├── repositories/   - Repository implementations               │
+│  │   ├── AuthRepositoryImpl.kt                                  │
+│  │   ├── PatientRepositoryImpl.kt                               │
+│  │   └── UserRepositoryImpl.kt                                  │
+│  └── mappers/        - Data transformation                      │
+│      └── Mappers.kt                                             │
+│                                                                 │
+│  core/                                                          │
+│  ├── database/       - Local storage (Room)                     │
+│  │   ├── IntellisoftDatabase.kt                                 │
+│  │   ├── entities/   - Database entities                        │
+│  │   ├── daos/       - Data Access Objects                      │
+│  │   └── Converters.kt                                          │
+│  ├── networking/     - Remote data (Ktor)                       │
+│  │   ├── IntellisoftApiService.kt                               │
+│  │   ├── IntellisoftApiServiceImpl.kt                           │
+│  │   ├── KtorClient.kt                                          │
+│  │   ├── dtos/       - Data Transfer Objects                    │
+│  │   └── helpers/    - Network utilities                        │
+│  └── preferences/    - Settings storage (DataStore)             │
+│      └── AppPreferences.kt                                      │
+└─────────────────────────────────────────────────────────────────┘
+```
+
 
 ## Libraries Used
 
@@ -64,7 +135,3 @@
 - **Kotlinx Serialization**
     - Kotlin-native JSON serialization library
     - Type-safe serialization/deserialization of data classes
-
-
-
-
