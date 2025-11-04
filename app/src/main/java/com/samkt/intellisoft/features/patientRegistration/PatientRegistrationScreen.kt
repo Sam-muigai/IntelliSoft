@@ -100,6 +100,7 @@ fun PatientRegistrationScreenContent(
                     onEvent(AddPatientScreenEvent.OnPatientNumberChange(it))
                 },
                 label = "Patient's Number",
+                placeHolder = "Enter unique Patient Number",
                 errorMessage = addPatientScreenState.patientNumberError
             )
 
@@ -120,6 +121,7 @@ fun PatientRegistrationScreenContent(
                     onEvent(AddPatientScreenEvent.OnFirstNameChange(it))
                 },
                 label = "First Name",
+                placeHolder = "Enter Patient's First Name",
                 errorMessage = addPatientScreenState.firstNameError
             )
 
@@ -129,6 +131,7 @@ fun PatientRegistrationScreenContent(
                     onEvent(AddPatientScreenEvent.OnLastNameChange(it))
                 },
                 label = "Last Name",
+                placeHolder = "Enter Patient's Last Name",
                 errorMessage = addPatientScreenState.lastNameError
             )
 
@@ -139,7 +142,7 @@ fun PatientRegistrationScreenContent(
                 },
                 label = "Date of Birth",
                 errorMessage = addPatientScreenState.dobError,
-                placeHolder = "Select Date of Birth"
+                placeHolder = "Select Patient's Date of Birth"
             )
 
             TibaDropDown(
@@ -149,7 +152,7 @@ fun PatientRegistrationScreenContent(
                     onEvent(AddPatientScreenEvent.OnGenderChange(it))
                 },
                 label = "Gender",
-                placeHolder = "Select Gender",
+                placeHolder = "Select Patient's Gender",
                 errorMessage = addPatientScreenState.genderError
             )
 

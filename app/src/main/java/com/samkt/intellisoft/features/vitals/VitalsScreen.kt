@@ -115,6 +115,7 @@ fun VitalsScreenContent(
                     onEvent(VitalsScreenEvent.OnHeightChange(it))
                 },
                 label = "Height(In CM)",
+                placeHolder = "Enter Height in centimeters",
                 errorMessage = vitalsScreenState.heightError
             )
             TibaTextField(
@@ -123,6 +124,7 @@ fun VitalsScreenContent(
                     onEvent(VitalsScreenEvent.OnWeightChange(it))
                 },
                 label = "Weight(In KG)",
+                placeHolder = "Enter Weight in kilograms",
                 errorMessage = vitalsScreenState.weightError
             )
             TibaTextField(

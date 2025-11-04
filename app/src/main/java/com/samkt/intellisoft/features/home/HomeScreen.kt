@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +39,7 @@ import com.samkt.intellisoft.core.ui.components.TibaDatePicker
 import com.samkt.intellisoft.core.ui.components.TibaFilledButton
 import com.samkt.intellisoft.domain.model.User
 import com.samkt.intellisoft.features.patientRegistration.AddPatientScreenEvent
+import com.samkt.intellisoft.utils.getTodaysDate
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -49,6 +51,11 @@ fun HomeScreen(
     val date = homeScreenViewModel.date
     val homeScreenUiState =
         homeScreenViewModel.homeScreenUiState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(true) {
+        homeScreenViewModel.getPatients(getTodaysDate())
+    }
+
     HomeScreenContent(
         user = user,
         onAddPatientClick = onAddPatientClick,
@@ -162,8 +169,8 @@ fun HomeScreenContent(
                             modifier = Modifier.fillMaxSize(),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            item {
-                                Column {
+                            if (state.visits.isNotEmpty()) {
+                                item {
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -193,7 +200,17 @@ fun HomeScreenContent(
                                         )
                                     }
                                 }
+                            } else {
+                                item {
+                                    Text(
+                                        text = "No visits available",
+                                        modifier = Modifier.fillMaxWidth(),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
                             }
+
                             items(state.visits) { visit ->
                                 Column {
                                     Row(
@@ -205,7 +222,6 @@ fun HomeScreenContent(
                                             text = visit.name,
                                             modifier = Modifier.weight(1f),
                                             style = MaterialTheme.typography.bodyMedium,
-                                            textAlign = TextAlign.Center
                                         )
                                         Text(
                                             text = visit.age.toString(),

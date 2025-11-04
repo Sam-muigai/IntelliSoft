@@ -39,16 +39,13 @@ class HomeScreenViewModel(
     var date by mutableStateOf(getTodaysDate())
         private set
 
-    init {
-        getPatients(getTodaysDate())
-    }
 
     fun onDateChange(date: String) {
         this.date = date
         getPatients(date)
     }
 
-    private fun getPatients(
+    fun getPatients(
         date: String
     ) {
         _homeScreenUiState.update { HomeScreenUiState.Loading }

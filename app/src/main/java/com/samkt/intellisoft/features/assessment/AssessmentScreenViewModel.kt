@@ -87,7 +87,15 @@ class AssessmentScreenViewModel(
                 visitDate.isEmpty() -> {
                     _assessmentScreenState.update {
                         it.copy(
-                            visitDateError = "Visit date cannot be empty"
+                            visitDateError = "Please provide a visit date"
+                        )
+                    }
+                    return@apply
+                }
+                comment.isEmpty() -> {
+                    _assessmentScreenState.update {
+                        it.copy(
+                            commentError = "Please provide a comment"
                         )
                     }
                     return@apply
@@ -129,6 +137,7 @@ data class AssessmentScreenState(
     val onDietToLoseWeight: String = "Yes",
     val currentlyTakingDrugs: String = "Yes",
     val comment: String = "",
+    val commentError: String? = null,
     val isOverweight: Boolean = false,
     val patientId: Int = 0,
     val vitalsId: Int = 0,

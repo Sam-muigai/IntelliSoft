@@ -202,7 +202,8 @@ fun AssessmentScreenContent(
                     onEvent(AssessmentScreenEvent.OnCommentChange(it))
                 },
                 label = "Comments",
-                minLines = 4
+                minLines = 4,
+                errorMessage = assessmentScreenState.commentError
             )
             Row(
                 modifier = Modifier
