@@ -1,6 +1,9 @@
 package com.samkt.intellisoft.features.patientRegistration
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.samkt.intellisoft.domain.model.Patient
+import com.samkt.intellisoft.domain.repositories.PatientRepository
 import com.samkt.intellisoft.features.navigation.Screens
 import com.samkt.intellisoft.utils.OneTimeEvents
 import kotlinx.coroutines.channels.Channel
@@ -8,8 +11,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 
-class PatientRegistrationScreenViewModel : ViewModel() {
+class PatientRegistrationScreenViewModel(
+    private val patientRepository: PatientRepository
+) : ViewModel() {
 
     private val _addPatientScreenState = MutableStateFlow(AddPatientScreenState())
     val addPatientScreenState = _addPatientScreenState.asStateFlow()
@@ -123,7 +130,18 @@ class PatientRegistrationScreenViewModel : ViewModel() {
                     return@apply
                 }
             }
-            _oneTimeEvent.trySend(OneTimeEvents.Navigate(Screens.Vitals.route))
+            viewModelScope.launch {
+                val patient = Patient(
+                    patientNumber = patientNumber,
+                    registrationDate = LocalDate.parse(registrationDate),
+                    firstName = firstName,
+                    lastName = lastName,
+                    dateOfBirth = LocalDate.parse(registrationDate),
+                    gender = gender
+                )
+                patientRepository.savePatient(patient)
+                _oneTimeEvent.send(OneTimeEvents.Navigate(Screens.Vitals.route))
+            }
         }
     }
 

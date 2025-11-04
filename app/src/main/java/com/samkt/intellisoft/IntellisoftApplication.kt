@@ -1,6 +1,7 @@
 package com.samkt.intellisoft
 
 import android.app.Application
+import com.samkt.intellisoft.core.database.di.databaseModule
 import com.samkt.intellisoft.core.networking.di.networkModule
 import com.samkt.intellisoft.core.preferences.di.preferencesModule
 import com.samkt.intellisoft.data.di.dataModule
@@ -27,6 +28,7 @@ class IntellisoftApplication : Application() {
             patientRegistrationModule,
             vitalsModule,
             assessmentModule,
+            databaseModule,
             preferencesModule
         )
         startKoin {
