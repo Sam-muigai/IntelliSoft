@@ -136,7 +136,7 @@ fun HomeScreenContent(
             TibaDatePicker(
                 value = date,
                 onValueChange = onDateChange,
-                label = "Registration Date",
+                label = "Date",
                 placeHolder = "Choose a date",
             )
             AnimatedContent(
