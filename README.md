@@ -4,7 +4,7 @@
 <table>
   <tr>
     <th>Login</th>
-    <th>Sign Up </th>
+    <th>Patient listings</th>
     <th>Patient Registration</th>
   </tr>
   <tr>
