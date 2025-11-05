@@ -112,16 +112,6 @@ class AssessmentScreenViewModel(
                 )
                 patientRepository.saveAssessment(assessment)
                 _oneTimeEvents.send(OneTimeEvents.PopBackStack)
-                /*_assessmentScreenState.update { it.copy(isLoading = true) }
-                patientRepository.syncPatientData(patientId)
-                    .onSuccess {
-                        _assessmentScreenState.update { it.copy(isLoading = false) }
-                        _oneTimeEvents.send(OneTimeEvents.PopBackStack)
-                    }
-                    .onFailure { error ->
-                        _assessmentScreenState.update { it.copy(isLoading = false) }
-                        _oneTimeEvents.send(OneTimeEvents.ShowMessage(error.message.toString()))
-                    }*/
             }
         }
     }

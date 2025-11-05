@@ -8,8 +8,8 @@ import com.samkt.intellisoft.core.networking.IntellisoftApiService
 import com.samkt.intellisoft.core.networking.dtos.GetVisitsRequest
 import com.samkt.intellisoft.core.networking.dtos.PatientData
 import com.samkt.intellisoft.core.networking.helpers.ApiResponse
-import com.samkt.intellisoft.data.mappers.toData
 import com.samkt.intellisoft.data.mappers.toDomain
+import com.samkt.intellisoft.data.mappers.toDto
 import com.samkt.intellisoft.data.mappers.toEntity
 import com.samkt.intellisoft.domain.helpers.Result
 import com.samkt.intellisoft.domain.model.Assessment
@@ -60,7 +60,7 @@ class PatientRepositoryImpl(
         }
         coroutineScope {
             val patient = patientEntity.toDomain()
-            intellisoftApiService.savePatient(patient.toData())
+            intellisoftApiService.savePatient(patient.toDto())
             patientDao.updatePatientSyncStatus(patientId, true)
             val patients = getPatients()
             val patientData = patients.find { it.unique == patient.patientNumber }
@@ -101,7 +101,7 @@ class PatientRepositoryImpl(
 
     private suspend fun saveVitalToBackend(vitalsEntity: VitalsEntity) {
         runCatching {
-            val response = intellisoftApiService.setVitals(vitalsEntity.toDomain().toData())
+            val response = intellisoftApiService.setVitals(vitalsEntity.toDomain().toDto())
             val assessmentEntities = assessmentDao.getAssessmentsByVitalId(vitalsEntity.id).first()
             assessmentEntities.forEach { assessment ->
                 updateAssessmentBackendIds(
@@ -132,7 +132,7 @@ class PatientRepositoryImpl(
 
     private suspend fun saveAssessmentToBackend(assessment: AssessmentEntity) {
         runCatching {
-            intellisoftApiService.saveVisits(assessment.toDomain().toData())
+            intellisoftApiService.saveVisits(assessment.toDomain().toDto())
         }.onSuccess {
             assessmentDao.updateSyncStatus(assessmentId = assessment.id, true)
         }

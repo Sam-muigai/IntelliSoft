@@ -53,10 +53,6 @@ fun HomeScreen(
         homeScreenViewModel.homeScreenUiState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
 
-    /*LaunchedEffect(true) {
-        homeScreenViewModel.getPatients(date)
-    }*/
-
     LaunchedEffect(true) {
         Sync.initialize(context)
     }

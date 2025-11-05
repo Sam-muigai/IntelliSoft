@@ -17,7 +17,7 @@ import com.samkt.intellisoft.domain.model.Visit
 import com.samkt.intellisoft.domain.model.Vitals
 import com.samkt.intellisoft.utils.formatDate
 
-fun SignUp.toData(): SignUpRequest {
+fun SignUp.toDto(): SignUpRequest {
     return SignUpRequest(
         email = email,
         password = password,
@@ -26,7 +26,7 @@ fun SignUp.toData(): SignUpRequest {
     )
 }
 
-fun Login.toData(): LoginRequest {
+fun Login.toDto(): LoginRequest {
     return LoginRequest(
         email = email,
         password = password,
@@ -45,7 +45,7 @@ fun Patient.toEntity(): PatientEntity {
     )
 }
 
-fun Patient.toData(): AddPatientRequest {
+fun Patient.toDto(): AddPatientRequest {
     return AddPatientRequest(
         dob = dateOfBirth.formatDate(),
         firstname = firstName,
@@ -89,7 +89,7 @@ fun VitalsEntity.toDomain(): Vitals {
     )
 }
 
-fun Vitals.toData(): SaveVitalsRequest {
+fun Vitals.toDto(): SaveVitalsRequest {
     return SaveVitalsRequest(
         bmi = calculateBmi(height, weight),
         height = height,
@@ -125,7 +125,7 @@ fun AssessmentEntity.toDomain(): Assessment {
     )
 }
 
-fun Assessment.toData(): SaveVisitRequest {
+fun Assessment.toDto(): SaveVisitRequest {
     return SaveVisitRequest(
         comments = comments,
         generalHealth = generalHealth,
