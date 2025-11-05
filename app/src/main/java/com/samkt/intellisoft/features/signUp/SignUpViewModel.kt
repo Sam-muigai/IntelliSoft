@@ -101,7 +101,7 @@ class SignUpViewModel(
                     return@apply
                 }
 
-                !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                !android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches() -> {
                     _signUpScreenState.update {
                         it.copy(emailError = "Please enter a valid email address")
                     }
@@ -164,7 +164,7 @@ class SignUpViewModel(
             }
             viewModelScope.launch {
                 val signUp = SignUp(
-                    email = email,
+                    email = email.trim(),
                     firstname = firstName,
                     lastname = lastName,
                     password = password,
