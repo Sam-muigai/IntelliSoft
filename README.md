@@ -1,5 +1,5 @@
 ### IntelliSoft Mobile Engineer Test
-
+An offline first app for managing patients, it allows health care providers to register patients and vital information then syncs the information to the backend.
 ## Screenshots
 <table>
   <tr>
