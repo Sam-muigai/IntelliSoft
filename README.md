@@ -33,7 +33,7 @@
 ## Architecture
 
 The application follows **Clean Architecture** principles with clear separation of concerns across
-three main layers:
+three main layers, with background synchronization handled by WorkManager:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -96,8 +96,29 @@ three main layers:
 │  │   ├── KtorClient.kt                                          │
 │  │   ├── dtos/       - Data Transfer Objects                    │
 │  │   └── helpers/    - Network utilities                        │
-│  └── preferences/    - Settings storage (DataStore)             │
-│      └── AppPreferences.kt                                      │
+│  ├── preferences/    - Settings storage (DataStore)             │
+│  │   └── AppPreferences.kt                                      │
+│  └── workManager/    - Background synchronization               │
+│      └── workers/    - Background sync workers                  │
+│          └── SyncPatientInfoWorker.kt                           │
+└─────────────────────────────────────────────────────────────────┘
+                                   │
+                                   ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    BACKGROUND SYNCHRONIZATION                   │
+├─────────────────────────────────────────────────────────────────┤
+│  WorkManager Integration:                                       │
+│  ├── SyncPatientInfoWorker   - Patient data sync worker         │
+│  ├── Network Constraints     - Sync only when connected         │
+│  ├── Foreground Service      - Long-running sync operations     │
+│  └── Retry Policy            - Automatic retry on failure       │
+│                                                                 │
+│  Features:                                                      │
+│  ├── Background sync of patient information                     │
+│  ├── Network-aware synchronization                              │
+│  ├── Persistent notification during sync                        │
+│  ├── Exponential backoff retry strategy                         │
+│  └── Handles offline scenarios gracefully                       │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -112,6 +133,13 @@ three main layers:
 
 - **Room Database**
     - SQLite abstraction layer for local data storage to allow fluent database access while harnessing the full power of SQLite.
+ 
+### Background Processing
+
+- **WorkManager**
+    - Jetpack library for deferrable, guaranteed background work
+    - Handles background synchronization with network constraints
+    - Provides retry policies and persistent notifications
 
 ### Dependency Injection
 
