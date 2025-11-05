@@ -73,6 +73,7 @@ dependencies {
     // koin
     implementation(libs.koin.compose)
     implementation(libs.koin.android)
+    implementation(libs.koin.workManager)
 
     // Kotlinx serialization
     implementation(libs.kotlinx.serialization.core)
@@ -83,7 +84,12 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
 
     // room
-    //  implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+
+    // work Manager
+    implementation(libs.androidx.work.runtime.ktx)
+
+    // google fonts
+    implementation(libs.google.fonts)
 }

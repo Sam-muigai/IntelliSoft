@@ -19,7 +19,7 @@ interface PatientRepository {
 
     suspend fun saveAssessment(assessment: Assessment): Int
 
-    suspend fun syncPatientData(patientId: Int): kotlin.Result<String>
+    suspend fun syncInformation()
 
     suspend fun getVisits(date: String): Result<List<Visit>>
 }

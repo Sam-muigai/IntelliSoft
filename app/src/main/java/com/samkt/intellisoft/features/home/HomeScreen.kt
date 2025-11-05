@@ -1,6 +1,7 @@
 package com.samkt.intellisoft.features.home
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.samkt.intellisoft.core.ui.components.TibaDatePicker
 import com.samkt.intellisoft.core.ui.components.TibaFilledButton
+import com.samkt.intellisoft.core.workManager.workers.Sync
 import com.samkt.intellisoft.domain.model.User
 import org.koin.androidx.compose.koinViewModel
 
@@ -44,14 +47,18 @@ fun HomeScreen(
     onAddPatientClick: () -> Unit = {},
 ) {
     val user = homeScreenViewModel.user.collectAsStateWithLifecycle().value
+    val isSyncing = homeScreenViewModel.isSyncing.collectAsStateWithLifecycle().value
     val date = homeScreenViewModel.date
     val homeScreenUiState =
         homeScreenViewModel.homeScreenUiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
+
+    /*LaunchedEffect(true) {
+        homeScreenViewModel.getPatients(date)
+    }*/
 
     LaunchedEffect(true) {
-        homeScreenViewModel.getPatients(
-            date,
-        )
+        Sync.initialize(context)
     }
 
     HomeScreenContent(
@@ -60,6 +67,7 @@ fun HomeScreen(
         onDateChange = homeScreenViewModel::onDateChange,
         date = date,
         homeScreenUiState = homeScreenUiState,
+        isSyncing = isSyncing
     )
 }
 
@@ -72,6 +80,7 @@ fun HomeScreenContent(
     onDateChange: (String) -> Unit = {},
     date: String = "",
     homeScreenUiState: HomeScreenUiState,
+    isSyncing: Boolean
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -126,13 +135,39 @@ fun HomeScreenContent(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Text(
-                "Patient's listing",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                ),
-                textDecoration = TextDecoration.Underline,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "Patient's listing",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                    ),
+                    textDecoration = TextDecoration.Underline,
+                )
+                AnimatedVisibility(
+                    isSyncing
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(16.dp),
+                            strokeWidth = 2.dp
+                        )
+                        Spacer(Modifier.width(12.dp))
+                        Text(
+                            "Syncing patient info",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.primary
+                            ),
+                        )
+                    }
+                }
+            }
             TibaDatePicker(
                 value = date,
                 onValueChange = onDateChange,

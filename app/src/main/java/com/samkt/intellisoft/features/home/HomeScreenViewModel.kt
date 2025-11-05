@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.samkt.intellisoft.core.workManager.status.SyncManager
 import com.samkt.intellisoft.domain.helpers.Result
 import com.samkt.intellisoft.domain.model.User
 import com.samkt.intellisoft.domain.model.Visit
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 class HomeScreenViewModel(
     userRepository: UserRepository,
     private val patientRepository: PatientRepository,
+    private val syncManager: SyncManager
 ) : ViewModel() {
 
     val user = userRepository.getUser()
@@ -28,6 +30,13 @@ class HomeScreenViewModel(
             viewModelScope,
             SharingStarted.WhileSubscribed(5_000),
             User(),
+        )
+
+    val isSyncing = syncManager.isSyncing
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            false
         )
 
     private val _homeScreenUiState = MutableStateFlow<HomeScreenUiState>(HomeScreenUiState.Loading)
@@ -39,6 +48,16 @@ class HomeScreenViewModel(
     fun onDateChange(date: String) {
         this.date = date
         getPatients(date)
+    }
+
+    init {
+        viewModelScope.launch {
+            isSyncing.collect { syncing ->
+                if (!syncing) {
+                    getPatients(date)
+                }
+            }
+        }
     }
 
     fun getPatients(

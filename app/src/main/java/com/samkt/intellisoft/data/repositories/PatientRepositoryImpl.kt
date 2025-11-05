@@ -52,15 +52,14 @@ class PatientRepositoryImpl(
         return vitalsDao.saveVitals(vitals.toEntity()).toInt()
     }
 
-    override suspend fun syncPatientData(patientId: Int): kotlin.Result<String> {
+    private suspend fun syncPatientData(patientId: Int) {
         val patientEntity = patientDao.getPatientById(patientId).first()
         if (patientEntity == null) {
             Log.w("Sync", "No patient found with ID: $patientId")
-            return kotlin.Result.failure(Exception("No patient found with ID: $patientId"))
+            return
         }
-        val patient = patientEntity.toDomain()
-
-        return runCatching {
+        coroutineScope {
+            val patient = patientEntity.toDomain()
             intellisoftApiService.savePatient(patient.toData())
             patientDao.updatePatientSyncStatus(patientId, true)
             val patients = getPatients()
@@ -70,7 +69,16 @@ class PatientRepositoryImpl(
             }
             val vitals = vitalsDao.getVitals(patientId).first()
             syncVitals(vitals)
-            "Patient data synced successfully"
+        }
+    }
+
+    override suspend fun syncInformation() {
+        val unsyncedPatients = patientDao.getAllUnsyncedPatients().first()
+        coroutineScope {
+            val syncPatientsWork = unsyncedPatients.map { patient ->
+                async { syncPatientData(patientId = patient.id) }
+            }
+            syncPatientsWork.awaitAll()
         }
     }
 
