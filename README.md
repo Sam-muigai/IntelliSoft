@@ -26,7 +26,7 @@ An offline first app for managing patients, it allows health care providers to r
 
 ## Architecture
 
-The application follows **Clean Architecture** principles with clear separation of concerns across
+The application follows MVVM architecture with clear separation of concerns across
 three main layers, with background synchronization handled by WorkManager:
 
 ```
