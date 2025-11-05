@@ -67,7 +67,7 @@ fun HomeScreen(
         onDateChange = homeScreenViewModel::onDateChange,
         date = date,
         homeScreenUiState = homeScreenUiState,
-        isSyncing = isSyncing
+        isSyncing = isSyncing,
     )
 }
 
@@ -80,7 +80,7 @@ fun HomeScreenContent(
     onDateChange: (String) -> Unit = {},
     date: String = "",
     homeScreenUiState: HomeScreenUiState,
-    isSyncing: Boolean
+    isSyncing: Boolean,
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -138,7 +138,7 @@ fun HomeScreenContent(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     "Patient's listing",
@@ -148,21 +148,21 @@ fun HomeScreenContent(
                     textDecoration = TextDecoration.Underline,
                 )
                 AnimatedVisibility(
-                    isSyncing
+                    isSyncing,
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(16.dp),
-                            strokeWidth = 2.dp
+                            strokeWidth = 2.dp,
                         )
                         Spacer(Modifier.width(12.dp))
                         Text(
                             "Syncing patient info",
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.primary
+                                color = MaterialTheme.colorScheme.primary,
                             ),
                         )
                     }

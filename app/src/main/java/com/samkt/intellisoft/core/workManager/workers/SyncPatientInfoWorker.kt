@@ -1,10 +1,14 @@
 package com.samkt.intellisoft.core.workManager.workers
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
-import android.net.http.HttpException
+import android.os.Build
+import androidx.core.app.NotificationCompat
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingWorkPolicy
+import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
@@ -20,7 +24,7 @@ class SyncPatientInfoWorker(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-        patientRepository.syncInformation()
+        setForeground(getForegroundInfo())
         return try {
             patientRepository.syncInformation()
             Result.success()
@@ -31,6 +35,39 @@ class SyncPatientInfoWorker(
             e.printStackTrace()
             Result.failure()
         }
+    }
+
+    override suspend fun getForegroundInfo(): ForegroundInfo {
+        val notificationId = 1
+        val channelId = "sync_channel"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Background Sync",
+                NotificationManager.IMPORTANCE_MIN,
+            ).apply {
+                setSound(null, null)
+                enableVibration(false)
+                setShowBadge(false)
+            }
+
+            val manager =
+                applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+        }
+
+        // Notification
+        val notification = NotificationCompat.Builder(applicationContext, channelId)
+            .setSmallIcon(android.R.drawable.stat_sys_upload)
+            .setContentTitle("Syncing data")
+            .setContentText("Patient information is being synced...")
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setOngoing(true)
+            .setSilent(true)
+            .build()
+
+        return ForegroundInfo(notificationId, notification)
     }
 
     companion object {

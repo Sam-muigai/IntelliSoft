@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class HomeScreenViewModel(
     userRepository: UserRepository,
     private val patientRepository: PatientRepository,
-    private val syncManager: SyncManager
+    private val syncManager: SyncManager,
 ) : ViewModel() {
 
     val user = userRepository.getUser()
@@ -36,7 +36,7 @@ class HomeScreenViewModel(
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5_000),
-            false
+            false,
         )
 
     private val _homeScreenUiState = MutableStateFlow<HomeScreenUiState>(HomeScreenUiState.Loading)
