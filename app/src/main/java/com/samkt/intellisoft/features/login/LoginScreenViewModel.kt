@@ -56,14 +56,14 @@ class LoginScreenViewModel(
         clearErrorState()
         loginScreenState.value.apply {
             when {
-                email.isEmpty() -> {
+                email.trim().isEmpty() -> {
                     _loginScreenState.update {
                         it.copy(emailError = "Email cannot be empty")
                     }
                     return@apply
                 }
 
-                !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                !android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches() -> {
                     _loginScreenState.update {
                         it.copy(emailError = "Please enter a valid email address")
                     }
@@ -94,7 +94,7 @@ class LoginScreenViewModel(
 
             viewModelScope.launch {
                 val login = Login(
-                    email = email,
+                    email = email.trim(),
                     password = password,
                 )
                 when (val result = authRepository.login(login)) {
