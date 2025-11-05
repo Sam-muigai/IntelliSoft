@@ -10,16 +10,16 @@
   <tr>
     <td><img src="screenshots/login.jpg" width="250" alt="Login"></td>
     <td><img src="screenshots/patient_listing.jpg" width="250" alt="Listing"></td>
-    <td><img src="screenshots/assessment.jpg" width="250" alt="General Assessment"></td>
+    <td><img src="screenshots/patient_registration.jpg" width="250" alt="Registration"></td>
   </tr>
   <tr>
-    <th>Patient Registration</th>
     <th>Vitals</th>
+    <th>Assessment</th>
     <th>Overweight Assessment</th>
   </tr>
   <tr>
-    <td><img src="screenshots/patient_registration.jpg" width="250" alt="Registration"></td>
     <td><img src="screenshots/vitals.jpg" width="250" alt="Vitals"></td>
+    <td><img src="screenshots/assessment.jpg" width="250" alt="General Assessment"></td>
     <td><img src="screenshots/overweight_assessment.jpg" width="250" alt="Overweight Assessment"></td>
   </tr>
 </table>
